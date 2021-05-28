@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   width="16"
+   height="16"
+   viewBox="0 0 4.2333333 4.2333334"
+   version="1.1"
+   id="svg3315">
+  <defs
+     id="defs3309">
+    <filter
+       style="color-interpolation-filters:sRGB"
+       id="filter4043"
+       x="-1.189528e-06"
+       width="1.0000024"
+       y="-1.2106581e-06"
+       height="1.0000024">
+      <feGaussianBlur
+         stdDeviation="2.471174e-05"
+         id="feGaussianBlur4045" />
+    </filter>
+    <filter
+       style="color-interpolation-filters:sRGB"
+       id="filter4047"
+       x="-3.3074723e-06"
+       width="1.0000066"
+       y="-4.3675923e-06"
+       height="1.0000087">
+      <feGaussianBlur
+         stdDeviation="2.471174e-05"
+         id="feGaussianBlur4049" />
+    </filter>
+    <filter
+       style="color-interpolation-filters:sRGB"
+       id="filter4051"
+       x="-5.2890314e-06"
+       width="1.0000106"
+       y="-5.2890314e-06"
+       height="1.0000106">
+      <feGaussianBlur
+         stdDeviation="2.471174e-05"
+         id="feGaussianBlur4053" />
+    </filter>
+  </defs>
+  <metadata
+     id="metadata3312">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+        <cc:license
+           rdf:resource="http://artlibre.org/licence/lal" />
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Pascal Schuppli</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <dc:rights>
+          <cc:Agent>
+            <dc:title>This icon is in the public domain.</dc:title>
+          </cc:Agent>
+        </dc:rights>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://artlibre.org/licence/lal">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <g
+     id="layer1"
+     style="display:inline" />
+  <g
+     id="layer3"
+     style="display:inline">
+    <g
+       id="g4057"
+       transform="matrix(0.06288546,0,0,0.06288546,-6.0865217,-11.423456)">
+      <ellipse
+         style="opacity:1;fill:none;stroke:#ffffff;stroke-width:6;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stop-color:#000000"
+         id="path3883-6"
+         cx="130.61409"
+         cy="215.731"
+         rx="24.929291"
+         ry="24.494188" />
+      <path
+         style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:6.00001;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stop-color:#000000"
+         id="path3915"
+         d="m 148.54566,215.731 a 17.931572,17.931572 0 0 1 -6.22055,13.57915 L 130.61409,215.731 Z" />
+    </g>
+    <ellipse
+       style="display:inline;opacity:1;fill:none;stroke:#ffffff;stroke-width:6;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;filter:url(#filter4043);stop-color:#000000"
+       id="path3883-6-8"
+       cx="370.43558"
+       cy="231.98994"
+       rx="24.929291"
+       ry="24.494188" />
+    <path
+       style="display:inline;opacity:1;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:6.00001;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;filter:url(#filter4047);stop-color:#000000"
+       id="path3915-8"
+       d="m 388.36715,231.98994 a 17.931572,17.931572 0 0 1 -6.22055,13.57915 l -11.71102,-13.57915 z" />
+    <circle
+       style="display:inline;opacity:1;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:6.00001;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;filter:url(#filter4051);stop-color:#000000"
+       id="path3917-4"
+       cx="370.55774"
+       cy="231.72353"
+       r="5.6067142" />
+  </g>
+</svg>

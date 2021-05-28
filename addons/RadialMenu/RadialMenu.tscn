@@ -1,0 +1,28 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://addons/RadialMenu/RadialMenu.gd" type="Script" id=1]
+
+[node name="ArcPopupMenu" type="Popup"]
+margin_left = 0.749146
+margin_top = 1.20634
+margin_right = 220.749
+margin_bottom = 221.206
+rect_min_size = Vector2( 220, 220 )
+rect_pivot_offset = Vector2( 110, 110 )
+size_flags_horizontal = 4
+size_flags_vertical = 4
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+width = 70
+
+[node name="ItemIcons" type="Control" parent="."]
+margin_right = 40.0
+margin_bottom = 40.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Tween" type="Tween" parent="."]
+[connection signal="tween_all_completed" from="Tween" to="." method="_on_Tween_tween_all_completed"]
