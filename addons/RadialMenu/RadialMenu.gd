@@ -508,12 +508,14 @@ func close_menu():
 	has_left_center = false
 	if not show_animation:
 		state = MenuState.closed
-		hide()		
+		hide()
+		get_parent().remove_child(self)
+		is_submenu = false
 	else:
 		state = MenuState.closing
 		orig_item_angle = item_angle	
 		$Tween.interpolate_property(self, "item_angle", item_angle, 0.01, animation_speed_factor, Tween.TRANS_SINE, Tween.EASE_IN)
-		$Tween.start()
+		$Tween.start()				
 
 func open_submenu(submenu, idx):
 	state = MenuState.submenu_active
@@ -574,7 +576,10 @@ func _on_Tween_tween_all_completed():
 		hide()
 		item_angle = circle_coverage*2*PI/menu_items.size()
 		_calc_new_geometry()
-		update()	
+		update()
+		if is_submenu:
+			get_parent().remove_child(self)
+			is_submenu = false
 	elif state == MenuState.opening:
 		state = MenuState.open
 		item_angle = circle_coverage*2*PI/menu_items.size()
@@ -634,10 +639,9 @@ func _on_visibility_changed():
 func _on_submenu_item_selected(action, position):
 	state = MenuState.open
 	var submenu = menu_items[active_submenu_idx].action
-	_disconnect_submenu_signals(submenu)
-	submenu.is_submenu = false
+	_disconnect_submenu_signals(submenu)	
 	active_submenu_idx = -1
-	close_menu()
+	close_menu()	
 	emit_signal("item_selected", action, opened_at_position)
 
 func _on_submenu_item_hovered(_item):
@@ -649,7 +653,7 @@ func _on_submenu_cancelled():
 	state = MenuState.open
 	set_selected_item(get_selected_by_mouse())
 	if selected == -1 or selected == active_submenu_idx:
-		get_tree().set_input_as_handled()
-	submenu.is_submenu = false			
+		get_tree().set_input_as_handled()	
 	active_submenu_idx = -1
 	update()
+	
