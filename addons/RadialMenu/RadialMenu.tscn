@@ -6,8 +6,8 @@
 margin_left = 0.749146
 margin_top = 1.20634
 margin_right = 220.749
-margin_bottom = 221.206
-rect_min_size = Vector2( 220, 220 )
+margin_bottom = 164.199
+rect_min_size = Vector2( 220, 162.993 )
 rect_pivot_offset = Vector2( 110, 110 )
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -16,6 +16,7 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 width = 70
+icon_scale = 0.9
 
 [node name="ItemIcons" type="Control" parent="."]
 margin_right = 40.0

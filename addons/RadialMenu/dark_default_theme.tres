@@ -15,7 +15,6 @@ RadialMenu/colors/Background = Color( 0.12549, 0.12549, 0.12549, 0.901961 )
 RadialMenu/colors/Stroke = Color( 0.25098, 0.25098, 0.25098, 0.784314 )
 "RadialMenu/constants/Center Radius" = 0
 "RadialMenu/constants/Decorator Ring Width" = 5
-"RadialMenu/constants/Item Ring Width" = 10
 "RadialMenu/constants/Ring Stroke Width" = 1
 "RadialMenu/constants/Selector Segment Width" = 5
 "RadialMenu/constants/Stroke Width" = 1

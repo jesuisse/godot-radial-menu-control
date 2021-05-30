@@ -1,5 +1,11 @@
 extends Object
 
+const RAD_360 := 2*PI
+const RAD_270 := 1.5*PI
+const RAD_180 := PI
+const RAD_90 := 0.5*PI
+
+
 static func calc_circle_coordinates(radius, npoints, angle_offset=0, offset=Vector2.ZERO):
 	"""
 	Calculates <npoints> coordinates on a circle with a given <radius>.
@@ -9,7 +15,7 @@ static func calc_circle_coordinates(radius, npoints, angle_offset=0, offset=Vect
 	Returns a PoolVector2Array with the coordinates.
 	"""
 	var coords = PoolVector2Array()
-	var angle = 2*PI / npoints
+	var angle = RAD_360 / npoints
 	for i in range(npoints):
 		var y = radius * sin(angle_offset + i*angle)
 		var x = radius * cos(angle_offset + i*angle)
@@ -17,12 +23,50 @@ static func calc_circle_coordinates(radius, npoints, angle_offset=0, offset=Vect
 	return coords
 
 
+static func calc_arc_AABB(radius, start_angle, end_angle, center=Vector2.ZERO) -> Rect2:
+	"""
+	Calculates the Axis-Aligned Bounding Box of the arc defined by the parameters.
+	"""
+	if end_angle-start_angle > RAD_360 - 0.0001:
+		return Rect2(center.x-radius, center.y-radius, 2*radius, 2*radius)
+	start_angle = fposmod(start_angle, RAD_360)
+	end_angle = fposmod(end_angle, RAD_360)
+			
+	var ps = Vector2(radius * cos(start_angle), radius * sin(start_angle))
+	var pe = Vector2(radius * cos(end_angle), radius * sin(end_angle))
+	
+	var minx = 0
+	var maxx = 0
+	var miny = 0
+	var maxy = 0
+		
+	if fposmod(start_angle-RAD_90, RAD_360) > fposmod(end_angle-RAD_90, RAD_360):
+		maxy = radius	
+	if fposmod(start_angle-RAD_180, RAD_360) > fposmod(end_angle-RAD_180, RAD_360):
+		minx = -radius	
+	if fposmod(start_angle-RAD_270, RAD_360) > fposmod(end_angle-RAD_270, RAD_360):
+		miny = -radius
+	if start_angle > end_angle:
+		maxx = radius
+		
+	if minx == 0:
+		minx = min(ps.x, pe.x)
+	if maxx == 0:
+		maxx = max(ps.x, pe.x)
+	if miny == 0:
+		miny = min(ps.y, pe.y)
+	if maxy == 0:
+		maxy = max(ps.y, pe.y)	
+	
+	return Rect2(minx + center.x, miny + center.y, maxx-minx, maxy-miny)
+
+
 static func calc_ring_segment(inner_radius, outer_radius, start_angle, end_angle, offset=Vector2.ZERO):
 	"""
 	Calculates the coordinates of a ring segment
 	"""	
 	var coords = PoolVector2Array()
-	var fraction_of_full = (end_angle - start_angle) / (2*PI)
+	var fraction_of_full = (end_angle - start_angle) / RAD_360
 	var nopoints = max(2, int(outer_radius * fraction_of_full))
 	var nipoints = max(2, int(inner_radius * fraction_of_full))	
 	var angle = (end_angle - start_angle) / nopoints
@@ -46,6 +90,16 @@ static func calc_ring_segment_centers(radius, n_points, start_angle, end_angle, 
 		var x = radius * cos(start_angle + i*angle)
 		coords.append(Vector2(x, y)+offset)
 	return coords
+
+
+static func calc_ring_segment_AABB(inner, outer, start_angle, end_angle, center=Vector2.ZERO) -> Rect2:
+	"""
+	Calculates the axis-aligned bounding box of a ring segment
+	"""
+	
+	var i_aabb = calc_arc_AABB(inner, start_angle, end_angle, center)	
+	var o_aabb = calc_arc_AABB(outer, start_angle, end_angle, center)
+	return i_aabb.merge(o_aabb)
 
 
 static func draw_ring_segment(canvas : CanvasItem, coords : PoolVector2Array, fill_color, stroke_color=null, width=1.0, antialiased=true):

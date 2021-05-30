@@ -31,12 +31,24 @@ func _ready():
 	submenu2.width = $RadialMenu.width
 	submenu2.default_theme = $RadialMenu.default_theme
 		
+	# ... and a third one	
+	var submenu3 = RadialMenu.instance()
+	submenu3.circle_coverage = 0.45
+	submenu3.width = $RadialMenu.width
+	submenu3.default_theme = $RadialMenu.default_theme		
+	
+	# ... and a fourth one	
+	var submenu4 = RadialMenu.instance()
+	submenu4.circle_coverage = 0.45
+	submenu4.width = $RadialMenu.width
+	submenu4.default_theme = $RadialMenu.default_theme	
+		
 	# Define the main menu's items
 	var menu_items = [
 		{'texture': TWODEE_TEXTURE, 'title': "Axis\nSetup", 'action': submenu1}, 
 		{'texture': POINTS_TEXTURE, 'title': "Dataset\nSetup", 'action': submenu2},
-		{'texture': GRID_TEXTURE, 'title': "Grid\nSetup", 'action': submenu1},
-		{'texture': TOOL_TEXTURE, 'title': "Advanced\nTools", 'action': submenu1},
+		{'texture': GRID_TEXTURE, 'title': "Grid\nSetup", 'action': submenu3},
+		{'texture': TOOL_TEXTURE, 'title': "Advanced\nTools", 'action': submenu4},
 		{'texture': ORIGIN_TEXTURE, 'title': "Back to\norigin", 'action': "action5"},
 		{'texture': SCALE_TEXTURE, 'title': "Reset\nscale", 'action': "action6"},		
 	]

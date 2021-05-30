@@ -20,19 +20,19 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
+[node name="Background" type="HBoxContainer" parent="."]
 margin_right = 1024.0
 margin_bottom = 600.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="ColorRectLeft" type="ColorRect" parent="HBoxContainer"]
+[node name="LeftThrid" type="ColorRect" parent="Background"]
 margin_right = 338.0
 margin_bottom = 600.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="ColorRectMiddle" type="ColorRect" parent="HBoxContainer"]
+[node name="MiddleThird" type="ColorRect" parent="Background"]
 margin_left = 342.0
 margin_right = 681.0
 margin_bottom = 600.0
@@ -40,7 +40,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 color = Color( 0.164706, 0.164706, 0.164706, 1 )
 
-[node name="ColorRight" type="ColorRect" parent="HBoxContainer"]
+[node name="RightThird" type="ColorRect" parent="Background"]
 margin_left = 685.0
 margin_right = 1024.0
 margin_bottom = 600.0
@@ -48,7 +48,7 @@ rect_clip_content = true
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="pexels-asad-photo-maldives-3320529" type="Sprite" parent="HBoxContainer/ColorRight"]
+[node name="pexels-asad-photo-maldives-3320529" type="Sprite" parent="Background/RightThird"]
 position = Vector2( 720.334, 626.756 )
 texture = ExtResource( 1 )
 
