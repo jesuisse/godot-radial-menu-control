@@ -3,7 +3,7 @@ extends PanelContainer
 """
 (c) 2021 Pascal Schuppli
 
-This code is made available under the MIT license. See LICENSE.txt for further
+This code is made available under the MIT license. See LICENSE for further
 information.
 """
 

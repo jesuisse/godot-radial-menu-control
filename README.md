@@ -51,7 +51,7 @@ The main parameters of a radial menu are its radius (always measured from the ce
 
 Colors and some size constants such as the width of the decorator ring/arc and the selector segment can be configured via themes. See the provided dark theme for an example.
 
-<img src="doc/config-naming.svg.png">
+<img src="doc/config-naming.svg.png" width="450px">
 
 UI considerations
 -----------------

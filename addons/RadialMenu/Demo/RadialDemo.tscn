@@ -81,7 +81,6 @@ __meta__ = {
 }
 
 [node name="RadialMenu" parent="." instance=ExtResource( 4 )]
-visible = true
 margin_left = 382.0
 margin_top = 0.0
 margin_right = 642.0

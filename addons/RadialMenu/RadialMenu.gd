@@ -22,6 +22,8 @@ const Draw = preload("drawing_library.gd")
 const DEBUG = false
 const DEFAULT_THEME = preload("default_theme.tres")
 const STAR_TEXTURE = preload("icons/Favorites.svg")
+const BACK_TEXTURE = preload("icons/Back.svg")
+const CLOSE_TEXTURE = preload("icons/Close.svg")
 
 # defines how long you have to wait before releasing a mouse button will 
 # close the menu.
@@ -32,11 +34,13 @@ enum Position { off, inside, outside }
 
 export var radius := 110 setget _set_radius
 export var width := 80 setget _set_width
+export var center_radius := 25 setget _set_center_radius
 export(Position) var selector_position = Position.inside setget _set_selector_position
 export(Position) var decorator_ring_position = Position.inside setget _set_decorator_ring_position
 export(float, 0.01, 1.0, 0.001) var circle_coverage = 0.66 setget _set_circle_coverage
 export(float, -1.578, 4.712, 0.001) var center_angle = -PI/2 setget _set_center_angle
 export var show_animation := true
+
 export(float, 0.01, 1.0, 0.01) var animation_speed_factor = 0.2
 
 export(float, 0.01, 2.0, 0.05) var icon_scale := 0.8 setget _set_icon_scale
@@ -82,6 +86,11 @@ func _set_width(new_width):
 	width = new_width
 	_calc_new_geometry()
 	update()
+
+func _set_center_radius(new_radius):
+	center_radius = new_radius	
+	update()
+
 
 func _set_selector_position(new_position):
 	selector_position = new_position
@@ -156,7 +165,7 @@ func _input(event):
 				select_prev()
 			else:
 				if not is_submenu:					
-					get_tree().set_input_as_handled()
+					get_tree().set_input_as_handled()				
 				activate_selected()											
 		elif state == MenuState.open and not is_wheel_button(event):
 			var msecs_since_opened = OS.get_ticks_msec() - msecs_at_opened			
@@ -173,8 +182,7 @@ func _handle_mouse_motion(_event):
 	if state == MenuState.submenu_active:
 		var subselected = menu_items[active_submenu_idx].action.get_selected_by_mouse()
 		if subselected != -1:
-			return
-		
+			return		
 	set_selected_item(get_selected_by_mouse())
 
 func _handle_actions(event):
@@ -233,10 +241,23 @@ func _draw():
 			select_coords = Draw.calc_ring_segment(inner-selector_size, inner, start_angle+selected*item_angle, start_angle+(selected+1)*item_angle, center_offset)
 			Draw.draw_ring_segment(self, select_coords, _get_color("Selector Segment"), null, 0, true)	
 
-	if DEBUG:		
-		var aabb = Draw.calc_ring_segment_AABB(radius-get_total_ring_width(), radius, start_angle, start_angle + count*item_angle, center_offset)
-		draw_rect(aabb, Color(1, 0, 0), false, 1.0, true)
-		draw_circle(center_offset, 5, Color(1, 0, 0))
+	if center_radius != 0:
+		_draw_center()
+
+
+
+func _draw_center():
+	if is_submenu:
+		return
+	var bg = _get_color("Center Background")
+	var fg = _get_color("Center Stroke")
+	var tex = CLOSE_TEXTURE
+	if active_submenu_idx != -1:
+		tex = BACK_TEXTURE
+	draw_circle(center_offset, center_radius, bg)
+	draw_arc(center_offset, center_radius, 0, 2*PI, center_radius, fg, 3, true)
+	draw_texture(tex, center_offset-CLOSE_TEXTURE.get_size()/2)
+
 
 
 func get_selected_by_mouse():
@@ -245,10 +266,12 @@ func get_selected_by_mouse():
 	var lsq = mpos.length_squared()
 	var inner_limit = min((radius-width)*(radius-width), 400)
 	var outer_limit = (radius+width*OUTSIDE_SELECTION_LIMIT)*(radius+width*OUTSIDE_SELECTION_LIMIT)
-	if is_submenu:
+	if is_submenu :
 		inner_limit = pow(get_inner_outer()[0], 2)
 	# make selection ring wider than the actual ring of items
 	if lsq < inner_limit or lsq > outer_limit:
+		# being outside the selection limit only cancels your selection if you've moved
+		# the mouse outside since having made the selection...
 		if has_left_center:
 			s = -1
 	else:

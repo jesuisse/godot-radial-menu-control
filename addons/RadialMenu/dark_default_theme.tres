@@ -4,7 +4,8 @@
 
 [resource]
 RadialMenu/colors/Background = Color( 0.12549, 0.12549, 0.12549, 0.901961 )
-"RadialMenu/colors/Center Background" = Color( 0.2, 0.2, 0.2, 1 )
+"RadialMenu/colors/Center Background" = Color( 0.133333, 0.133333, 0.133333, 0.901961 )
+"RadialMenu/colors/Center Stroke" = Color( 0.101961, 0.403922, 0.670588, 1 )
 "RadialMenu/colors/Expand Icon Modulation" = Color( 1, 1, 1, 1 )
 "RadialMenu/colors/Icon Modulation" = Color( 0.741176, 0.741176, 0.741176, 1 )
 "RadialMenu/colors/Ring Background" = Color( 0.0196078, 0.352941, 0.647059, 0.901961 )

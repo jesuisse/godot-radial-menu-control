@@ -3,6 +3,7 @@
 [ext_resource path="res://addons/RadialMenu/RadialMenu.gd" type="Script" id=1]
 
 [node name="ArcPopupMenu" type="Popup"]
+visible = true
 margin_left = 0.749146
 margin_top = 1.20634
 margin_right = 220.749
