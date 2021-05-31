@@ -1,14 +1,7 @@
+The radial menu control is a plugin for Godot Engine. It is made available
+to you under the MIT license.
 
-
-This is a plugin for Godot Engine. The plugin is available under the MIT 
-license (see below).
-
-Copyright (c) 2021 Pascal Schuppli.
-
-Godot Engine itself is also available under the MIT license (see below):
-
-Copyright (c) 2007-2021 Juan Linietsky, Ariel Manzur. 
-Copyright (c) 2014-2021 Godot Engine contributors.
+Copyright (c) 2021 Pascal Schuppli
 
 Permission is hereby granted, free of charge, to any person obtaining a 
 copy of this software and associated documentation files (the "Software"), 

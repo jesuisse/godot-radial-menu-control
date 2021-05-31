@@ -192,7 +192,6 @@ func _handle_actions(event):
 		get_tree().set_input_as_handled()
 		activate_selected()
 
-
 	
 func _draw():
 	var count = menu_items.size()	
