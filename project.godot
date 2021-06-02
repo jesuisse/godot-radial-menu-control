@@ -20,6 +20,14 @@ run/main_scene="res://addons/RadialMenu/Demo/RadialDemo.tscn"
 run/low_processor_mode=true
 config/icon="res://icon.png"
 
+[input]
+
+test={
+"deadzone": 0.5,
+"events": [ Object(InputEventJoypadMotion,"resource_local_to_scene":false,"resource_name":"","device":0,"axis":0,"axis_value":-1.0,"script":null)
+ ]
+}
+
 [rendering]
 
 quality/driver/driver_name="GLES2"

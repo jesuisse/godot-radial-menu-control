@@ -90,6 +90,7 @@ rect_pivot_offset = Vector2( 130, 130 )
 size_flags_vertical = 0
 radius = 130
 width = 50
+center_radius = 20
 circle_coverage = 1.0
 center_angle = -1.02
 icon_scale = 0.7

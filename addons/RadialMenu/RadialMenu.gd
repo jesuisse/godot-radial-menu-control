@@ -25,10 +25,20 @@ const STAR_TEXTURE = preload("icons/Favorites.svg")
 const BACK_TEXTURE = preload("icons/Back.svg")
 const CLOSE_TEXTURE = preload("icons/Close.svg")
 
+const JOY_DEADZONE = 0.2
+const JOY_AXIS_RESCALE = 1.0/(1.0-JOY_DEADZONE)
+
+const ITEM_ICONS_NAME = "ItemIcons"
+const TWEEN_NAME = "Tween"
+
+const gamepad_device = 0
+const gamepad_axis_x = 0
+const gamepad_axis_y = 1
+
+
 # defines how long you have to wait before releasing a mouse button will 
 # close the menu.
 const MOUSE_RELEASE_TIMEOUT = 400
-const OUTSIDE_SELECTION_LIMIT = 3
 
 enum Position { off, inside, outside }
 
@@ -42,6 +52,8 @@ export(float, -1.578, 4.712, 0.001) var center_angle = -PI/2 setget _set_center_
 export var show_animation := true
 
 export(float, 0.01, 1.0, 0.01) var animation_speed_factor = 0.2
+
+export(float, 0, 10, 0.5) var outside_selection_factor = 3.0
 
 export(float, 0.01, 2.0, 0.05) var icon_scale := 0.8 setget _set_icon_scale
 
@@ -59,9 +71,10 @@ var menu_items = [
 	{ 'texture': STAR_TEXTURE, 'title': 'Item5', 'action': 'arc_action5'},	
 	{ 'texture': STAR_TEXTURE, 'title': 'Item6', 'action': 'arc_action6'},	
 	{ 'texture': STAR_TEXTURE, 'title': 'Item7', 'action': 'arc_action7'},	
-]
+] setget set_items
 
-enum MenuState { closed, opening, open, moving, submenu_active, closing}
+# mostly used for animation
+enum MenuState { closed, opening, open, moving, closing}
 
 var ready = false
 var _item_children_present := false
@@ -124,11 +137,11 @@ func _set_decorator_ring_position(new_pos):
 	decorator_ring_position = new_pos
 	_calc_new_geometry()
 	update()
-
+	
 
 func _calc_new_geometry():	
 	var n = menu_items.size()
-	var angle = circle_coverage * 2 * PI / menu_items.size()
+	var angle = circle_coverage * 2.0 * PI / menu_items.size()
 	var sa = center_angle - 0.5 * n * angle
 	var aabb = Draw.calc_ring_segment_AABB(radius-get_total_ring_width(), radius, sa, sa + n*angle)		
 	rect_min_size = aabb.size
@@ -136,15 +149,17 @@ func _calc_new_geometry():
 	rect_pivot_offset = -aabb.position
 	center_offset = -aabb.position
 	_update_item_icons()
-		
-func _enter_tree():
-	_calc_new_geometry()
-	
-func _ready():	
+
+			
+func _ready():		
 	ready = true
+	_register_menu_child_nodes()
 	_update_item_icons()	
+
+func _input(event):
+	_radial_input(event)
 	
-func _input(event):	
+func _radial_input(event):
 	if not visible:
 		return
 	if state == MenuState.opening or state == MenuState.closing:
@@ -152,38 +167,39 @@ func _input(event):
 		return
 			
 	if event is InputEventMouseMotion:
-		_handle_mouse_motion(event)		
-	
-	if state == MenuState.submenu_active:
+		set_selected_item(get_selected_by_mouse())
+	elif event is InputEventJoypadMotion:
+		set_selected_item(get_selected_by_joypad())
+		return
+			
+	if has_open_submenu():
 		return
 	
 	if event is InputEventMouseButton:
-		if event.is_pressed():
-			if event.button_index == BUTTON_WHEEL_DOWN:
-				select_next()				
-			elif event.button_index == BUTTON_WHEEL_UP:
-				select_prev()
-			else:
-				if not is_submenu:					
-					get_tree().set_input_as_handled()				
-				activate_selected()											
-		elif state == MenuState.open and not is_wheel_button(event):
-			var msecs_since_opened = OS.get_ticks_msec() - msecs_at_opened			
-			if msecs_since_opened > MOUSE_RELEASE_TIMEOUT:				
-				get_tree().set_input_as_handled()
-				activate_selected()
+		_handle_mouse_buttons(event)		
 	else:
 		_handle_actions(event)
 
+
 func is_wheel_button(event):
 	return event.button_index in [BUTTON_WHEEL_UP, BUTTON_WHEEL_DOWN, BUTTON_WHEEL_LEFT, BUTTON_WHEEL_RIGHT]
+
+func _handle_mouse_buttons(event):
+	if event.is_pressed():
+		if event.button_index == BUTTON_WHEEL_DOWN:
+			select_next()				
+		elif event.button_index == BUTTON_WHEEL_UP:
+			select_prev()
+		else:
+			if not is_submenu:					
+				get_tree().set_input_as_handled()				
+			activate_selected()											
+	elif state == MenuState.open and not is_wheel_button(event):
+		var msecs_since_opened = OS.get_ticks_msec() - msecs_at_opened			
+		if msecs_since_opened > MOUSE_RELEASE_TIMEOUT:				
+			get_tree().set_input_as_handled()
+			activate_selected()
 	
-func _handle_mouse_motion(_event):
-	if state == MenuState.submenu_active:
-		var subselected = menu_items[active_submenu_idx].action.get_selected_by_mouse()
-		if subselected != -1:
-			return		
-	set_selected_item(get_selected_by_mouse())
 
 func _handle_actions(event):
 	if event.is_action_pressed("ui_cancel"):
@@ -231,7 +247,7 @@ func _draw():
 		Draw.draw_ring_segment(self, coords, _get_color("Ring Background"), null, 0, true)
 		
 	# draw selection ring segment
-	if selected != -1 and state != MenuState.submenu_active:
+	if selected != -1 and not has_open_submenu():
 		var selector_size = _get_constant("Selector Segment Width")		
 		var select_coords
 		if selector_position == Position.outside:
@@ -251,21 +267,33 @@ func _draw_center():
 		return
 	var bg = _get_color("Center Background")
 	var fg = _get_color("Center Stroke")
+	if selected == -1:
+		#bg = _get_color("Selected Background")
+		fg = _get_color("Selector Segment")
 	var tex = CLOSE_TEXTURE
 	if active_submenu_idx != -1:
 		tex = BACK_TEXTURE
 	draw_circle(center_offset, center_radius, bg)
-	draw_arc(center_offset, center_radius, 0, 2*PI, center_radius, fg, 3, true)
+	draw_arc(center_offset, center_radius, 0, 2*PI, center_radius, fg, 2, true)
 	draw_texture(tex, center_offset-CLOSE_TEXTURE.get_size()/2)
 
 
-
 func get_selected_by_mouse():
+	"""
+	Returns the index of the menu item that is currently selected by the mouse
+	(or -1 when nothing is selected)
+	"""
+	
+	if has_open_submenu():		
+		if get_open_submenu().get_selected_by_mouse() != -1:
+			# we don't change the selection while a submenu has a valid selection
+			return active_submenu_idx
+	
 	var s = selected
 	var mpos = get_local_mouse_position() - center_offset
 	var lsq = mpos.length_squared()
 	var inner_limit = min((radius-width)*(radius-width), 400)
-	var outer_limit = (radius+width*OUTSIDE_SELECTION_LIMIT)*(radius+width*OUTSIDE_SELECTION_LIMIT)
+	var outer_limit = (radius+width*outside_selection_factor)*(radius+width*outside_selection_factor)
 	if is_submenu :
 		inner_limit = pow(get_inner_outer()[0], 2)
 	# make selection ring wider than the actual ring of items
@@ -278,15 +306,67 @@ func get_selected_by_mouse():
 		has_left_center = true
 		s = get_itemindex_from_vector(mpos)
 	return s
+
+func get_selected_by_joypad():
+	if has_open_submenu():
+		return active_submenu_idx
+	
+	var xAxis = Input.get_joy_axis(gamepad_device, gamepad_axis_x)
+	var yAxis = Input.get_joy_axis(gamepad_device, gamepad_axis_y)
+	if abs(xAxis) > JOY_DEADZONE:
+		if xAxis > 0:
+			xAxis = (xAxis - JOY_DEADZONE) * JOY_AXIS_RESCALE
+		else:
+			xAxis = (xAxis + JOY_DEADZONE) * JOY_AXIS_RESCALE
+	else:
+		xAxis = 0
+	if abs(yAxis) > JOY_DEADZONE:
+		if yAxis > 0:
+			yAxis = (yAxis - JOY_DEADZONE) * JOY_AXIS_RESCALE
+		else:
+			yAxis = (yAxis + JOY_DEADZONE) * JOY_AXIS_RESCALE
+	else:
+		yAxis = 0
+	
+	var jpos = Vector2(xAxis, yAxis)	
+	var s = selected
+	if jpos.length_squared() > 0.36:	
+		has_left_center = true
+		s = get_itemindex_from_vector(jpos)
+		if s == -1:
+			s = selected
+	return s
 	
 
+func has_open_submenu():
+	"""
+	Determines whether the current menu has a submenu open
+	"""
+	return active_submenu_idx != -1
+
+func get_open_submenu():
+	"""
+	Returns the submenu node if one is open, or null
+	"""
+	if active_submenu_idx != -1:
+		return menu_items[active_submenu_idx].action
+	else:
+		return null
+
 func select_next():
+	"""
+	Selects the next item in the menu (clockwise)
+	"""
 	var n = menu_items.size()
 	if 2*PI - n*item_angle < 0.01 or selected < n-1:
 		set_selected_item((selected+1) % n)
 		has_left_center=false
 
+
 func select_prev():
+	"""
+	Selects the previous item in the menu (clockwise)
+	"""
 	var n = menu_items.size()
 	if 2*PI - n*item_angle < 0.01 or selected > 0:
 		set_selected_item(int(fposmod(selected-1, n)))
@@ -333,6 +413,15 @@ func _clear_item_icons():
 		node.queue_free()
 	_item_children_present = false
 
+
+func _register_menu_child_nodes():	
+	for item in get_children():
+		if item.name == ITEM_ICONS_NAME:
+			continue
+		if item.name == TWEEN_NAME:
+			continue
+		# do something with the others
+		
 
 func _create_item_icons():
 	if not ready:
@@ -465,12 +554,7 @@ func _clear_items():
 	for node in n.get_children():
 		n.remove_child(node)	
 		node.queue_free()
-	"""
-	n = $ExpandIcons
-	for node in n.get_children():
-		n.remove_child(node)
-		node.queue_free()
-	"""
+	
 
 func get_itemindex_from_vector(v: Vector2):
 	"""
@@ -515,7 +599,13 @@ func set_selected_item(itemidx):
 	"""
 	update()
 
-func open_menu(center_position):		
+func open_menu(center_position: Vector2):
+	"""
+	Opens the menu at the given position.
+	
+	:param center_position: The coordinates of the menu center.
+	"""
+			
 	rect_position.x = center_position.x - center_offset.x
 	rect_position.y = center_position.y - center_offset.y	
 	item_angle = circle_coverage*2*PI/menu_items.size()
@@ -539,8 +629,7 @@ func close_menu():
 		$Tween.interpolate_property(self, "item_angle", item_angle, 0.01, animation_speed_factor, Tween.TRANS_SINE, Tween.EASE_IN)
 		$Tween.start()				
 
-func open_submenu(submenu, idx):
-	state = MenuState.submenu_active
+func open_submenu(submenu, idx):	
 	active_submenu_idx = idx
 	update()
 	
@@ -624,9 +713,11 @@ func signal_action():
 
 func set_items(items):
 	"""
-	Changes the menu items. Expects a list of 3-item lists; the first item is 
-	a texture, the second is a short title and the third is either an action or
-	a submenu.
+	Changes the menu items. Expects a list of 3-item dictionaries with the
+	keys 'texture', 'title' and 'action'.
+	
+	The value for the action can be anything you wish. If it is a RadialMenu,
+	it will be treated as a submenu.
 	"""
 	_clear_items()
 	menu_items = items
@@ -635,6 +726,51 @@ func set_items(items):
 	if visible:
 		update()
 	
+	
+func set_item_text(idx: int, text: String):
+	"""
+	Sets the title text of a menu item.
+	
+	:param idx: The item index. The item must exist!
+	:param text: The title text
+	"""
+	if idx < menu_items.size():
+		menu_items[idx].title = text
+		_update_item_icons()
+	else:
+		print_debug("Invalid index {} in set_item_text" % idx)
+
+
+func set_item_action(idx: int, action):
+	"""
+	Sets the action of a menu item.
+	
+	:param idx: The item index. The item must exist!
+	:param action: The action that will be emitted by item_selected.
+	
+	Note: If the action is a RadialMenu, it will be treated as a submenu.
+	"""
+	if idx < menu_items.size():
+		menu_items[idx].action = action
+		_update_item_icons()
+	else:
+		print_debug("Invalid index {} in set_item_action" % idx)
+
+
+
+func set_item_icon(idx: int, texture: Texture):
+	"""
+	Sets the icon of a menu item.
+	
+	:param idx: The item index. The item must exist!
+	:param texture: A texture that will serve as the icon
+	"""
+	if idx < menu_items.size():
+		menu_items[idx].texture = texture
+		_update_item_icons()
+	else:
+		print_debug("Invalid index {} in set_item_texture" % idx)
+
 
 func _about_to_show():
 	selected = -1
@@ -649,8 +785,8 @@ func _about_to_show():
 
 func _on_visibility_changed():
 	if not visible:
-		return	
-	if show_animation:		
+		state = MenuState.closed
+	elif show_animation and state == MenuState.closed:
 		state = MenuState.opening
 		$Tween.interpolate_property(self, "item_angle", 0.01, orig_item_angle, animation_speed_factor, Tween.TRANS_SINE, Tween.EASE_IN)
 		$Tween.start()
@@ -658,21 +794,21 @@ func _on_visibility_changed():
 		state = MenuState.open
 
 
-func _on_submenu_item_selected(action, position):
-	state = MenuState.open
-	var submenu = menu_items[active_submenu_idx].action
+func _on_submenu_item_selected(action, position):	
+	var submenu = get_open_submenu()
 	_disconnect_submenu_signals(submenu)	
 	active_submenu_idx = -1
 	close_menu()	
 	emit_signal("item_selected", action, opened_at_position)
 
+
 func _on_submenu_item_hovered(_item):
 	set_selected_item(active_submenu_idx)
+
 	
 func _on_submenu_cancelled():
-	var submenu = menu_items[active_submenu_idx].action
-	_disconnect_submenu_signals(submenu)	
-	state = MenuState.open
+	var submenu = get_open_submenu()
+	_disconnect_submenu_signals(submenu)		
 	set_selected_item(get_selected_by_mouse())
 	if selected == -1 or selected == active_submenu_idx:
 		get_tree().set_input_as_handled()	

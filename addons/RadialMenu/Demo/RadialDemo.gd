@@ -44,7 +44,7 @@ func _ready():
 	submenu4.default_theme = $RadialMenu.default_theme	
 		
 	# Define the main menu's items
-	var menu_items = [
+	$RadialMenu.menu_items = [
 		{'texture': TWODEE_TEXTURE, 'title': "Axis\nSetup", 'action': submenu1}, 
 		{'texture': POINTS_TEXTURE, 'title': "Dataset\nSetup", 'action': submenu2},
 		{'texture': GRID_TEXTURE, 'title': "Grid\nSetup", 'action': submenu3},
@@ -52,9 +52,7 @@ func _ready():
 		{'texture': ORIGIN_TEXTURE, 'title': "Back to\norigin", 'action': "action5"},
 		{'texture': SCALE_TEXTURE, 'title': "Reset\nscale", 'action': "action6"},		
 	]
-	
-	$RadialMenu.set_items(menu_items)
-	
+		
 	
 func _input(event):
 	if event is InputEventMouseButton:		

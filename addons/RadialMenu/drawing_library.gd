@@ -163,5 +163,3 @@ static func draw_ring(canvas : CanvasItem, inner_radius : float, outer_radius : 
 		canvas.draw_polyline(coords_inner, stroke_color, width, antialiased)
 		canvas.draw_polyline(coords_outer, stroke_color, width, antialiased)
 
-
-
