@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/ToolPan.svg-7cf3f8f1cb796bb83b9a3c269cc556b9.stex"
+path="res://.import/2D.svg-90a3775b7e7e6d3392c2b183fe4c8f2c.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/RadialMenu/icons/ToolPan.svg"
-dest_files=[ "res://.import/ToolPan.svg-7cf3f8f1cb796bb83b9a3c269cc556b9.stex" ]
+source_file="res://addons/RadialMenu/Demo/icons/2D.svg"
+dest_files=[ "res://.import/2D.svg-90a3775b7e7e6d3392c2b183fe4c8f2c.stex" ]
 
 [params]
 

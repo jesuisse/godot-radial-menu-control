@@ -16,9 +16,13 @@ _global_script_class_icons={
 [application]
 
 config/name="Radial Menu"
-run/main_scene="res://addons/RadialMenu/Demo/RadialDemo.tscn"
+run/main_scene="res://addons/RadialMenu/Demo/RadialDemo3.tscn"
 run/low_processor_mode=true
 config/icon="res://icon.png"
+
+[editor_plugins]
+
+enabled=PoolStringArray( "RadialMenu" )
 
 [input]
 

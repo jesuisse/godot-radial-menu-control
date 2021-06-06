@@ -1,12 +1,12 @@
 tool
 extends Popup
-
 """
 (c) 2021 Pascal Schuppli
 
-This code is made available under the MIT license. See LICENSE.txt for further
-information.
+This code is made available under the MIT license. See the LICENSE file for 
+further information.
 """
+
 
 """ Signal is sent when an item is selected. Opening a submenu doesn't emit
 	this signal; if you are interested in that, use the submenu's about_to_show
@@ -31,20 +31,15 @@ const JOY_AXIS_RESCALE = 1.0/(1.0-JOY_DEADZONE)
 const ITEM_ICONS_NAME = "ItemIcons"
 const TWEEN_NAME = "Tween"
 
-const gamepad_device = 0
-const gamepad_axis_x = 0
-const gamepad_axis_y = 1
-
-
 # defines how long you have to wait before releasing a mouse button will 
 # close the menu.
 const MOUSE_RELEASE_TIMEOUT = 400
 
 enum Position { off, inside, outside }
 
-export var radius := 110 setget _set_radius
-export var width := 80 setget _set_width
-export var center_radius := 25 setget _set_center_radius
+export var radius := 150 setget _set_radius
+export var width := 50 setget _set_width
+export var center_radius := 20 setget _set_center_radius
 export(Position) var selector_position = Position.inside setget _set_selector_position
 export(Position) var decorator_ring_position = Position.inside setget _set_decorator_ring_position
 export(float, 0.01, 1.0, 0.001) var circle_coverage = 0.66 setget _set_circle_coverage
@@ -55,7 +50,7 @@ export(float, 0.01, 1.0, 0.01) var animation_speed_factor = 0.2
 
 export(float, 0, 10, 0.5) var outside_selection_factor = 3.0
 
-export(float, 0.01, 2.0, 0.05) var icon_scale := 0.8 setget _set_icon_scale
+export(float, 0.01, 2.0, 0.05) var icon_scale := 1.0 setget _set_icon_scale
 
 # This stores the default colors and constants which will be overriden by a theme
 export var default_theme : Theme = DEFAULT_THEME
@@ -76,6 +71,12 @@ var menu_items = [
 # mostly used for animation
 enum MenuState { closed, opening, open, moving, closing}
 
+# for gamepad input. Use setup_gamepad to change these values.
+var gamepad_device = 0
+var gamepad_axis_x = 0
+var gamepad_axis_y = 1
+var gamepad_deadzone = JOY_DEADZONE
+
 var ready = false
 var _item_children_present := false
 var has_left_center = false				
@@ -83,7 +84,7 @@ var is_submenu = false					# true for submenus
 var selected = -1						# currently selected menu item
 var state = MenuState.closed			# state of the menu
 
-var center_offset						# offset of the arc center from top left
+var center_offset = null				# offset of the arc center from top left
 var orig_item_angle = 0					# backup value for animation
 var msecs_at_opened = 0					# msecs since start when menu openeed
 var opened_at_position					# this is where user has clocked
@@ -92,12 +93,12 @@ var active_submenu_idx = -1
 
 func _set_radius(new_radius):
 	radius = new_radius
-	_calc_new_geometry()
+	_calc_new_geometry()	
 	update()
 	
 func _set_width(new_width):
 	width = new_width
-	_calc_new_geometry()
+	_calc_new_geometry()	
 	update()
 
 func _set_center_radius(new_radius):
@@ -107,41 +108,41 @@ func _set_center_radius(new_radius):
 
 func _set_selector_position(new_position):
 	selector_position = new_position
-	_calc_new_geometry()
+	_calc_new_geometry()	
 	update()
 	
 func _set_icon_scale(new_scale : float):
 	icon_scale = new_scale
-	_update_item_icons()
+	_update_item_icons()	
 	update()
 
 func _set_item_angle(new_angle: float):
-	item_angle = new_angle		
+	item_angle = new_angle
 	_calc_new_geometry()
 	update()
 
 func _set_circle_coverage(new_coverage: float):	
 	item_angle = new_coverage * 2 * PI / menu_items.size()
 	circle_coverage = new_coverage
-	_calc_new_geometry()
-	_update_item_icons()
+	_calc_new_geometry()	
 	update()
 
 		
 func _set_center_angle(new_angle: float):
+	item_angle = circle_coverage * 2 * PI / menu_items.size()
 	center_angle = new_angle
 	_calc_new_geometry()
 	update()
 	
 func _set_decorator_ring_position(new_pos):
 	decorator_ring_position = new_pos
-	_calc_new_geometry()
+	_calc_new_geometry()	
 	update()
 	
 
 func _calc_new_geometry():	
 	var n = menu_items.size()
-	var angle = circle_coverage * 2.0 * PI / menu_items.size()
+	var angle = circle_coverage * 2.0 * PI / menu_items.size()	
 	var sa = center_angle - 0.5 * n * angle
 	var aabb = Draw.calc_ring_segment_AABB(radius-get_total_ring_width(), radius, sa, sa + n*angle)		
 	rect_min_size = aabb.size
@@ -150,11 +151,35 @@ func _calc_new_geometry():
 	center_offset = -aabb.position
 	_update_item_icons()
 
+
+func _create_subtree():
+	"""
+	Creates necessary child nodes of the radial menu
+	"""
+	if not get_node_or_null(ITEM_ICONS_NAME):
+		var item_icons = Control.new()
+		item_icons.name = ITEM_ICONS_NAME
+		add_child(item_icons)
+	if not get_node_or_null(TWEEN_NAME):
+		var tween = Tween.new()
+		tween.name = TWEEN_NAME
+		add_child(tween)
+		tween.connect("tween_all_completed", self, "_on_Tween_tween_all_completed")
+
 			
 func _ready():		
 	ready = true
+	item_angle = circle_coverage * 2.0 * PI / menu_items.size()	
+	_create_subtree()
+	if not is_submenu:
+		# (submenus get their signals connected and disconnected elsewhere)
+		connect("about_to_show", self, "_about_to_show")
+		connect("visibility_changed", self, "_on_visibility_changed")
 	_register_menu_child_nodes()
-	_update_item_icons()	
+	_calc_new_geometry()
+	size_flags_horizontal = 0
+	size_flags_vertical = 0
+	
 
 func _input(event):
 	_radial_input(event)
@@ -179,6 +204,8 @@ func _radial_input(event):
 		_handle_mouse_buttons(event)		
 	else:
 		_handle_actions(event)
+
+
 
 
 func is_wheel_button(event):
@@ -278,6 +305,12 @@ func _draw_center():
 	draw_texture(tex, center_offset-CLOSE_TEXTURE.get_size()/2)
 
 
+func setup_gamepad(deviceid : int, xaxis : int, yaxis: int, deadzone : float = JOY_DEADZONE):
+	gamepad_device = deviceid
+	gamepad_axis_x = xaxis
+	gamepad_axis_y = yaxis
+	gamepad_deadzone = deadzone
+
 func get_selected_by_mouse():
 	"""
 	Returns the index of the menu item that is currently selected by the mouse
@@ -313,18 +346,18 @@ func get_selected_by_joypad():
 	
 	var xAxis = Input.get_joy_axis(gamepad_device, gamepad_axis_x)
 	var yAxis = Input.get_joy_axis(gamepad_device, gamepad_axis_y)
-	if abs(xAxis) > JOY_DEADZONE:
+	if abs(xAxis) > gamepad_deadzone:
 		if xAxis > 0:
-			xAxis = (xAxis - JOY_DEADZONE) * JOY_AXIS_RESCALE
-		else:
-			xAxis = (xAxis + JOY_DEADZONE) * JOY_AXIS_RESCALE
+			xAxis = (xAxis - gamepad_deadzone) * JOY_AXIS_RESCALE
+		else:	
+			xAxis = (xAxis + gamepad_deadzone) * JOY_AXIS_RESCALE
 	else:
 		xAxis = 0
-	if abs(yAxis) > JOY_DEADZONE:
+	if abs(yAxis) > gamepad_deadzone:
 		if yAxis > 0:
-			yAxis = (yAxis - JOY_DEADZONE) * JOY_AXIS_RESCALE
+			yAxis = (yAxis - gamepad_deadzone) * JOY_AXIS_RESCALE
 		else:
-			yAxis = (yAxis + JOY_DEADZONE) * JOY_AXIS_RESCALE
+			yAxis = (yAxis + gamepad_deadzone) * JOY_AXIS_RESCALE
 	else:
 		yAxis = 0
 	
@@ -725,7 +758,22 @@ func set_items(items):
 	#create_expand_icons()
 	if visible:
 		update()
+
+
+func add_icon_item(texture : Texture, title: String, action):
+	"""
+	Adds a menu item
 	
+	:param texture: The texture to use for the icon
+	:param title: A short title/label for the item
+	:param action: A unique id. If it is a RadialMenu object, 
+				   it will be treated as a submenu.
+	"""
+	var entry = { 'texture': texture, 'title': title, 'action': action}
+	menu_items.push_back(entry)
+	_create_item_icons()
+	if visible:
+		update()
 	
 func set_item_text(idx: int, text: String):
 	"""
@@ -755,7 +803,6 @@ func set_item_action(idx: int, action):
 		_update_item_icons()
 	else:
 		print_debug("Invalid index {} in set_item_action" % idx)
-
 
 
 func set_item_icon(idx: int, texture: Texture):

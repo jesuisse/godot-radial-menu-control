@@ -1,0 +1,16 @@
+extends Node
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	pass # Replace with function body.
+
+func _input(event):
+		
+	if event is InputEventMouseButton:		
+		# open the menu
+		if event.is_pressed() and event.button_index == BUTTON_RIGHT:
+			var m = event.position
+			# Pass the center position to open_menu as a Vector2!
+			$RadialMenu.open_menu(m)
+			# Make sure we don't handle the click again anywhere else...
+			get_tree().set_input_as_handled()

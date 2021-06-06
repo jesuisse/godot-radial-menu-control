@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/Zoom.svg-865ad107a40e70c0f4ff30bb51dd4833.stex"
+path="res://.import/Zoom.svg-33a3acb460690064cdc61a1e6d16f7d6.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/RadialMenu/icons/Zoom.svg"
-dest_files=[ "res://.import/Zoom.svg-865ad107a40e70c0f4ff30bb51dd4833.stex" ]
+source_file="res://addons/RadialMenu/Demo/icons/Zoom.svg"
+dest_files=[ "res://.import/Zoom.svg-33a3acb460690064cdc61a1e6d16f7d6.stex" ]
 
 [params]
 

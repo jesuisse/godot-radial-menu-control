@@ -1,0 +1,22 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://addons/RadialMenu/RadialMenu.gd" type="Script" id=1]
+[ext_resource path="res://addons/RadialMenu/Demo/RadialDemo2.gd" type="Script" id=2]
+
+[node name="RadialDemo2" type="Node2D"]
+script = ExtResource( 2 )
+
+[node name="RadialMenu" type="Popup" parent="."]
+visible = true
+margin_left = 478.169
+margin_top = 185.206
+margin_right = 778.169
+margin_bottom = 407.469
+rect_min_size = Vector2( 300, 222.263 )
+rect_pivot_offset = Vector2( 150, 150 )
+size_flags_horizontal = 0
+size_flags_vertical = 0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}

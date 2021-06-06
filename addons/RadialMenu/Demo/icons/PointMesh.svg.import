@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/CoordinateOrigin.svg-38d304b84b4b0e86a87e413c4cb3258d.stex"
+path="res://.import/PointMesh.svg-ea6ec6847e0a1bf4fb861d1be527e82e.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://addons/RadialMenu/icons/CoordinateOrigin.svg"
-dest_files=[ "res://.import/CoordinateOrigin.svg-38d304b84b4b0e86a87e413c4cb3258d.stex" ]
+source_file="res://addons/RadialMenu/Demo/icons/PointMesh.svg"
+dest_files=[ "res://.import/PointMesh.svg-ea6ec6847e0a1bf4fb861d1be527e82e.stex" ]
 
 [params]
 
