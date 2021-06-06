@@ -20,7 +20,7 @@ signal cancelled()
 const Draw = preload("drawing_library.gd")
 
 const DEBUG = false
-const DEFAULT_THEME = preload("default_theme.tres")
+const DEFAULT_THEME = preload("dark_default_theme.tres")
 const STAR_TEXTURE = preload("icons/Favorites.svg")
 const BACK_TEXTURE = preload("icons/Back.svg")
 const CLOSE_TEXTURE = preload("icons/Close.svg")
@@ -461,6 +461,8 @@ func _create_item_icons():
 		return	
 	_clear_item_icons()
 	var n = menu_items.size()
+	if n == 0:
+		return
 	var start_angle = center_angle - item_angle * (n >> 1) 	
 	var half_angle
 	if n % 2 == 0:

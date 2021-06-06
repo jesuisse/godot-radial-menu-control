@@ -1,13 +1,16 @@
 Radial Menu Control
 ===================
 
-This code provides a radial menu control node for the Godot Engine. The control
-is configurable to adapt to your needs. It supports keyboard, mouse, touch and gamepad input, though gamepad input is rudimentary.
+This code provides a radial menu control node for the Godot Engine (also called a "pie menu") with support for submenus. It supports keyboard, mouse and gamepad input. You can define the basic look of the control using themes:
+
+<img src="doc/RadialMenu/LightvsDarkTheme.png">
+
+You can also change how much of a full ring is covered by the menu, how wide the ring is and what radius it has, where the thin colored decorator/selector ring is placed and so on using exported properties. For example, in the image above, the second ring (the submenu) is configured to appear as an arc, while the main menu appears as a full ring.
 
 Required files
 --------------
 
-The main work is done by the script `RadialMenu.gd`. It has several dependencies:  `drawing_library.gd` and `default_theme.tres` are required. You need to copy at least these three files into your own projects to get a working RadialMenu control. Also copy the `addons/RadialMenu/icons` folder or create your own. The icons inside it are referenced in the code and there is currently no way to reconfigure these, but replacing the icons with your own should work.
+The main work is done by the script `RadialMenu.gd`. It has several dependencies:  `drawing_library.gd` and `dark_default_theme.tres` are required. You need to copy at least these three files into your own projects to get a working RadialMenu control. Also copy the `addons/RadialMenu/icons` folder or create your own. The icons inside it are referenced in the code and there is currently no way to reconfigure these, but replacing the icons with your own should work.
 
  `radial_menu_plugin.gd` and `plugin.cfg` are there for plugin initialisation if you want to use the RaidalMenu control via the Godot plugin system. Instead of using the plugin, you can also instance `RadialMenu.tscn` in your scene to get a preconfigured radial menu. 
 
@@ -27,10 +30,10 @@ There are three alternative ways to set up your radial menu:
     const RadialMenu = preload("path_to/addons/RadialMenu/RadialMenu.gd")
     ...
     # create a radial menu
-    menu = RadialMenu.new()
+    var menu = RadialMenu.new()    
 
    3. Instance the provided `RadialMenu.tscn` scene in your own scene tree. The 
-      scene contains a single Popup Node that has the `RadialMenu.gd` script attached.
+      scene contains a single Popup node that has the `RadialMenu.gd` script attached.
 
 Note that adding children to the RadialMenu node currently has no effect, but this may change in later versions, so *do not add children to a radial menu* in your scene tree if you want to make sure later versions will still work.
 
@@ -59,7 +62,7 @@ If the value for an item's action key is a RadialMenu node, it will be treated a
 Signals
 -------
 
-A radial menu control node emits three kinds of signals:
+A radial menu control node emits three signals:
 
    1. `item_selected(action, position)`
 
@@ -73,19 +76,16 @@ accepted via one of the supported input methods. `position` returns the original
 The `item_hovered` signal is emitted when a menu item is selected but not yet
 accepted as the user's choice; for example when the mouse first hovers over it.
 
-The `cancelled` signal is emitted when the user closes the menu without having
-made a choice.
+The `cancelled` signal is emitted when the user closes the menu without having made a choice.
 
-No special signal is emitted when a submenu is openend. If you are interested 
-interested in that event, you can use the `about_to_show` signal provided by 
-the popup.
+No special signal is emitted when a submenu is openend. If you are interested in that event, you can use the `about_to_show` signal provided by the popup.
 
 Configuration options
 ---------------------
 
-The main parameters of a radial menu are its radius (always measured from the center to the the outermost edge) and the width of the ring that holds the items. The radial menu doesn't have to be a full ring; you can also configure it as an arc. The center of the arc can be configured to sit at any angle.
+The main parameters are the menu radius (always measured from the center to the the outermost edge) and the width of the ring which holds the items. The radial menu doesn't have to be a full ring; you can also configure it as an arc. The center of the arc can sit at any angle.
 
-Colors and some size constants such as the width of the decorator ring/arc and the selector segment can be configured via themes. See the provided dark theme for an example.
+Colors and some size constants such as the width of the decorator ring/arc and the selector segment can be configured via themes. See the provided light and dark themes for an example.
 
 <img src="doc/RadialMenu/config-naming.svg.png" width="450px">
 
@@ -93,8 +93,7 @@ Colors and some size constants such as the width of the decorator ring/arc and t
 Public Properties
 -----------------
 
-All the following properties are considered to belong to the public interface; you can acess and change these properties at will. All of these properties except `menu_items` are also exported and therefore can be changed directly in the Godot editor.
-
+All the following properties are considered to belong to the public interface; you can acess and change these properties at will. All of these properties except `menu_items` are also exported by the script and can be changed directly in the Godot editor.
 
     menu_items
 
@@ -139,7 +138,7 @@ This changes the speed of the animation. Smaller values get you a faster animati
 
     outside_selection_factor : float
 
-A float which determines how far beyond the ring the mouse can be and still select a menu item. The factor is in ring widths, so a value of 0 means the mouse won't select outside of the ring at all, and 1 means the mouse will select up to a full ring width beyond the outer edge of the ring. Defaults to 3.
+A float which determines how far beyond the ring the mouse can still select a menu item. The factor is in ring widths, so a value of 0 means the mouse won't select outside of the ring at all, and 1 means the mouse will select up to a full ring width beyond the outer edge of the ring. Defaults to 3.
 
     icon_scale : float
 
@@ -147,8 +146,7 @@ Factor by which icons are scaled. This is applied to all textures provided via `
 
     default_theme : Theme
 
-Provides default values for colors and some constants which are used unless another active theme has entries for RadialMenu, which will override those of the default theme. Two example themes are provided; one is used as the default automatically. You don't need to bother with the default theme property if you're providing your own theme - you can just use the `theme` property instead.
-
+Provides default values for colors and some constants which are used unless another active theme has entries for RadialMenu, which will override those of the default theme. Two example themes are provided; the dark one is the standard. Don't clear the default theme! You don't need to bother with the default theme property if you're providing your own theme - you can just use the `theme` property instead.
 
 
 Public Methods
@@ -200,15 +198,7 @@ Returns the submenu object if one is currently active, or null.
 
 
 Sets the gamepad device id, x-axis and y-axis that controls the radial menu. 
-Deadzone defaults to 0.2.
-
-
-UI considerations
------------------
-
-Don't pack more than a handful of items into a radial menu, especially when you don't cover the whole ring and when users use gamepads to select items, since it gets harder to select items as the selection angle narrows, and most people's brains have to actually work at processing more than, say, 5-7 items.
-
-Also, currently stacking multiple radial submenus doesn't quite work (though it might in a later version, the code *almost* allows it); but this seems like a bad idea from a UI design standpoint. Finally, if you enable the menu animation, you might want to provide the user with a way to turn the animation off, because it _does_ slow down some people.
+Deadzone defaults to 0.2 (e.g. 20% of the maximum).
 
 
 Input handling details
@@ -224,20 +214,33 @@ This takes care of both the keyboard and some of the gamepad navigation.
 
 The mouse wheel also works to select items clockwise and counterclockwise. Moving the mouse back to the center deselects any selection made in the currently active menu; moving it far beyond the menu ring/arc also deselects. You can configure the radius at which deselection happens _outside_ the menu.
 
-There is also rudimentary gamepad support. You currently need to call the
-`setup_gamepad` method for every menu; the default settings let the first gamepad's 
-two lowest-numbered axes control the item selection.
+To configure gamepad input, you need to call the `setup_gamepad` method on every menu; the default settings let the first gamepad's two lowest-numbered axes control the item selection.
 
 If you want to extend the RadialMenu class, you can override `_input` and call `_radial_input(event)` to get the default radial menu input handling when needed. 
+
+
+UI considerations
+-----------------
+
+Don't pack more than a handful of items into a radial menu, especially when you don't cover the whole ring and when users use gamepads to select items, since it gets harder to select items as the selection angle narrows, and most people's brains have to actually work at processing more than, say, 5-7 items.
+
+Also, currently stacking multiple radial submenus doesn't quite work (though it might in a later version, the code *almost* allows it); but this seems like a bad idea from a UI design standpoint. 
+
+Finally, if you enable the menu animation, you should provide the user with a way to turn the animation off, because it _does_ slow down some people.
+
 
 Bugs and Caveats
 ----------------
 
 This is version 1.0.0. There are bound to be bugs. Please report bugs you encounter so they can be fixed.
 
+The RadialMenu code uses the CanvasItem drawing functions to draw the menu. 
+Antialiased drawing seems to work more reliably on the GLES2 backend than on
+GLES3.
+
+
 License
 -------
 
-See the LICENSE file. The code is licensed to you under the MIT license. If you find it useful, I do appreciate it if you tell me so :-)
-
+See the LICENSE file. The code is licensed to you under the MIT license.
 

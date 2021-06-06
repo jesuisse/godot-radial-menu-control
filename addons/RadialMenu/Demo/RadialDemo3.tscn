@@ -1,6 +1,5 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=5 format=2]
 
-[ext_resource path="res://addons/RadialMenu/dark_default_theme.tres" type="Theme" id=1]
 [ext_resource path="res://addons/RadialMenu/Demo/RadialDemo3.gd" type="Script" id=2]
 [ext_resource path="res://addons/RadialMenu/RadialMenu.tscn" type="PackedScene" id=3]
 [ext_resource path="res://addons/RadialMenu/Demo/Rock_02_CGBookcase.jpg" type="Texture" id=5]
@@ -98,5 +97,4 @@ width = 50
 circle_coverage = 1.0
 center_angle = -1.02
 icon_scale = 0.7
-default_theme = ExtResource( 1 )
 [connection signal="item_selected" from="RadialMenu" to="." method="_on_ArcPopupMenu_item_selected"]

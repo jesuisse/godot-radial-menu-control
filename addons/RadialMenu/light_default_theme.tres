@@ -1,0 +1,23 @@
+[gd_resource type="Theme" load_steps=2 format=2]
+
+[ext_resource path="res://addons/RadialMenu/icons/InterpLinear.svg" type="Texture" id=1]
+
+[resource]
+RadialMenu/colors/Background = Color( 1, 1, 1, 0.901961 )
+"RadialMenu/colors/Center Background" = Color( 1, 1, 1, 0.901961 )
+"RadialMenu/colors/Center Stroke" = Color( 0.188235, 0.556863, 0.776471, 0.901961 )
+"RadialMenu/colors/Expand Icon Modulation" = Color( 1, 1, 1, 1 )
+"RadialMenu/colors/Icon Modulation" = Color( 0.321569, 0.321569, 0.321569, 1 )
+"RadialMenu/colors/Ring Background" = Color( 0, 0.454902, 0.72549, 0.901961 )
+"RadialMenu/colors/Ring Stroke" = Color( 0.0980392, 0.509804, 0.752941, 0.901961 )
+"RadialMenu/colors/Selected Background" = Color( 0.564706, 0.835294, 0.996078, 0.901961 )
+"RadialMenu/colors/Selected Stroke" = Color( 0.564706, 0.835294, 0.996078, 0.901961 )
+"RadialMenu/colors/Selector Segment" = Color( 0.196078, 0.701961, 1, 0.905882 )
+RadialMenu/colors/Stroke = Color( 0.67451, 0.67451, 0.67451, 0.784314 )
+"RadialMenu/constants/Center Radius" = 0
+"RadialMenu/constants/Decorator Ring Width" = 5
+"RadialMenu/constants/Item Ring Width" = 10
+"RadialMenu/constants/Ring Stroke Width" = 1
+"RadialMenu/constants/Selector Segment Width" = 5
+"RadialMenu/constants/Stroke Width" = 1
+RadialMenu/icons/Expand = ExtResource( 1 )
