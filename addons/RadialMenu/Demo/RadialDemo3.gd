@@ -41,12 +41,12 @@ func _ready():
 		
 	# Define the main menu's items
 	$RadialMenu.menu_items = [
-		{'texture': TWODEE_TEXTURE, 'title': "Axis\nSetup", 'action': submenu1}, 
-		{'texture': POINTS_TEXTURE, 'title': "Dataset\nSetup", 'action': submenu2},
-		{'texture': GRID_TEXTURE, 'title': "Grid\nSetup", 'action': submenu3},
-		{'texture': TOOL_TEXTURE, 'title': "Advanced\nTools", 'action': submenu4},
-		{'texture': ORIGIN_TEXTURE, 'title': "Back to\norigin", 'action': "action5"},
-		{'texture': SCALE_TEXTURE, 'title': "Reset\nscale", 'action': "action6"},		
+		{'texture': TWODEE_TEXTURE, 'title': "Axis\nSetup", 'id': submenu1}, 
+		{'texture': POINTS_TEXTURE, 'title': "Dataset\nSetup", 'id': submenu2},
+		{'texture': GRID_TEXTURE, 'title': "Grid\nSetup", 'id': submenu3},
+		{'texture': TOOL_TEXTURE, 'title': "Advanced\nTools", 'id': submenu4},
+		{'texture': ORIGIN_TEXTURE, 'title': "Back to\norigin", 'id': "action5"},
+		{'texture': SCALE_TEXTURE, 'title': "Reset\nscale", 'id': "action6"},		
 	]
 		
 	

@@ -11,7 +11,7 @@ further information.
 """ Signal is sent when an item is selected. Opening a submenu doesn't emit
 	this signal; if you are interested in that, use the submenu's about_to_show
 	signal. """
-signal item_selected(action, position)
+signal item_selected(id, position)
 """ Signal is sent when you hover over an item """
 signal item_hovered(item)
 """ Signal is sent when the menu is closed without anything being selected """
@@ -59,13 +59,13 @@ var item_angle = PI/6 setget _set_item_angle
 
 # default menu itemsmn
 var menu_items = [
-	{ 'texture': STAR_TEXTURE, 'title': 'Item1', 'action': 'arc_action1'},
-	{ 'texture': STAR_TEXTURE, 'title': 'Item2', 'action': 'arc_action2'},	
-	{ 'texture': STAR_TEXTURE, 'title': 'Item3', 'action': 'arc_action3'},	
-	{ 'texture': STAR_TEXTURE, 'title': 'Item4', 'action': 'arc_action4'},	
-	{ 'texture': STAR_TEXTURE, 'title': 'Item5', 'action': 'arc_action5'},	
-	{ 'texture': STAR_TEXTURE, 'title': 'Item6', 'action': 'arc_action6'},	
-	{ 'texture': STAR_TEXTURE, 'title': 'Item7', 'action': 'arc_action7'},	
+	{ 'texture': STAR_TEXTURE, 'title': 'Item1', 'id': 'arc_id1'},
+	{ 'texture': STAR_TEXTURE, 'title': 'Item2', 'id': 'arc_id2'},	
+	{ 'texture': STAR_TEXTURE, 'title': 'Item3', 'id': 'arc_id3'},	
+	{ 'texture': STAR_TEXTURE, 'title': 'Item4', 'id': 'arc_id4'},	
+	{ 'texture': STAR_TEXTURE, 'title': 'Item5', 'id': 'arc_id5'},	
+	{ 'texture': STAR_TEXTURE, 'title': 'Item6', 'id': 'arc_id6'},	
+	{ 'texture': STAR_TEXTURE, 'title': 'Item7', 'id': 'arc_id7'},	
 ] setget set_items
 
 # mostly used for animation
@@ -293,8 +293,7 @@ func _draw_center():
 		return
 	var bg = _get_color("Center Background")
 	var fg = _get_color("Center Stroke")
-	if selected == -1:
-		#bg = _get_color("Selected Background")
+	if selected == -1:		
 		fg = _get_color("Selector Segment")
 	var tex = CLOSE_TEXTURE
 	if active_submenu_idx != -1:
@@ -330,8 +329,8 @@ func get_selected_by_mouse():
 		inner_limit = pow(get_inner_outer()[0], 2)
 	# make selection ring wider than the actual ring of items
 	if lsq < inner_limit or lsq > outer_limit:
-		# being outside the selection limit only cancels your selection if you've moved
-		# the mouse outside since having made the selection...
+		# being outside the selection limit only cancels your selection if you've
+		# moved the mouse outside since having made the selection...
 		if has_left_center:
 			s = -1
 	else:
@@ -381,7 +380,7 @@ func get_open_submenu():
 	Returns the submenu node if one is open, or null
 	"""
 	if active_submenu_idx != -1:
-		return menu_items[active_submenu_idx].action
+		return menu_items[active_submenu_idx].id
 	else:
 		return null
 
@@ -407,14 +406,14 @@ func select_prev():
 
 func activate_selected():
 	"""
-	Opens a submenu or closes the menu and signals an action, depending on what
+	Opens a submenu or closes the menu and signals an id, depending on what
 	was selected
 	"""
-	if selected != -1 and menu_items[selected].action is Popup:
-		open_submenu(menu_items[selected].action, selected)	
+	if selected != -1 and menu_items[selected].id is Popup:
+		open_submenu(menu_items[selected].id, selected)	
 	else:	
 		close_menu()	
-		signal_action()	
+		signal_id()	
 
 		
 func _connect_submenu_signals(submenu):	
@@ -719,14 +718,14 @@ func _on_Tween_tween_all_completed():
 	elif state == MenuState.moving:
 		state = MenuState.open
 		moved_to_position = rect_position + center_offset
-		menu_items[active_submenu_idx].action.open_menu(moved_to_position)
+		menu_items[active_submenu_idx].id.open_menu(moved_to_position)
 	
-func signal_action():
+func signal_id():
 	"""
 	Emits either an 'item_selected' or 'cancelled' signal
 	"""
 	if selected != -1 and menu_items[selected] != null:
-		emit_signal("item_selected", menu_items[selected].action, opened_at_position)
+		emit_signal("item_selected", menu_items[selected].id, opened_at_position)
 	elif selected == -1:
 		emit_signal("cancelled")
 
@@ -734,9 +733,9 @@ func signal_action():
 func set_items(items):
 	"""
 	Changes the menu items. Expects a list of 3-item dictionaries with the
-	keys 'texture', 'title' and 'action'.
+	keys 'texture', 'title' and 'id'.
 	
-	The value for the action can be anything you wish. If it is a RadialMenu,
+	The value for the id can be anything you wish. If it is a RadialMenu,
 	it will be treated as a submenu.
 	"""
 	_clear_items()
@@ -747,16 +746,16 @@ func set_items(items):
 		update()
 
 
-func add_icon_item(texture : Texture, title: String, action):
+func add_icon_item(texture : Texture, title: String, id):
 	"""
 	Adds a menu item
 	
 	:param texture: The texture to use for the icon
 	:param title: A short title/label for the item
-	:param action: A unique id. If it is a RadialMenu object, 
+	:param id: A unique id. If it is a RadialMenu object, 
 				   it will be treated as a submenu.
 	"""
-	var entry = { 'texture': texture, 'title': title, 'action': action}
+	var entry = { 'texture': texture, 'title': title, 'id': id}
 	menu_items.push_back(entry)
 	_create_item_icons()
 	if visible:
@@ -776,20 +775,20 @@ func set_item_text(idx: int, text: String):
 		print_debug("Invalid index {} in set_item_text" % idx)
 
 
-func set_item_action(idx: int, action):
+func set_item_id(idx: int, id):
 	"""
-	Sets the action of a menu item.
+	Sets the id of a menu item.
 	
 	:param idx: The item index. The item must exist!
-	:param action: The action that will be emitted by item_selected.
+	:param id: The id that will be emitted by item_selected.
 	
-	Note: If the action is a RadialMenu, it will be treated as a submenu.
+	Note: If the id is a RadialMenu, it will be treated as a submenu.
 	"""
 	if idx < menu_items.size():
-		menu_items[idx].action = action
+		menu_items[idx].id = id
 		_update_item_icons()
 	else:
-		print_debug("Invalid index {} in set_item_action" % idx)
+		print_debug("Invalid index {} in set_item_id" % idx)
 
 
 func set_item_icon(idx: int, texture: Texture):
@@ -828,12 +827,12 @@ func _on_visibility_changed():
 		state = MenuState.open
 
 
-func _on_submenu_item_selected(action, position):	
+func _on_submenu_item_selected(id, position):	
 	var submenu = get_open_submenu()
 	_disconnect_submenu_signals(submenu)	
 	active_submenu_idx = -1
 	close_menu()	
-	emit_signal("item_selected", action, opened_at_position)
+	emit_signal("item_selected", id, opened_at_position)
 
 
 func _on_submenu_item_hovered(_item):

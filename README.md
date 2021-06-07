@@ -5,7 +5,9 @@ This code provides a radial menu control node for the Godot Engine (also called 
 
 <img src="addons/RadialMenu/doc/LightvsDarkTheme.png">
 
-You can also change how much of a full ring is covered by the menu, how wide the ring is and what radius it has, where the thin colored decorator/selector ring is placed and so on using exported properties. For example, in the image above, the second ring (the submenu) is configured to appear as an arc, while the main menu appears as a full ring.
+You can also change some menu geometry settings, such as how much of a full ring is covered by the menu, the radius and width of the ring/arc via exported properties:
+
+<img src="addons/RadialMenu/doc/ExportedProperties.png">
 
 A short demo video of the radial menu control is available at https://youtu.be/uATC5JfqUkI.
 
@@ -42,7 +44,7 @@ Menu items are configured as a list of dictionaries:
     var items = [
        {'texture': SOME_TEXTURE, 
         'title': 'A short title', 
-        'action': 'anything, really'
+        'id': 'anything, really'
        },
        ...
     ]
@@ -60,7 +62,7 @@ Signals
 
 A radial menu control node emits three signals:
 
-   1. `item_selected(action, position)`
+   1. `item_selected(id, position)`
 
    2. `item_hovered(menu_item)`
 
@@ -156,7 +158,7 @@ Sets all menu items at once. You can also set the `menu_items` property directly
 
 Opens the RadialMenu (e.g. makes it visible at the given position). Do not place the menu yourself and call `show()`; use this method instead.
 
-    add_icon_item(texture : Texture, title: String, action)
+    add_icon_item(texture : Texture, title: String, id)
 
 Adds an item represented by an icon to the menu. Note: Calling add_icon_item is
 less efficient than setting all items at once via set_items.
@@ -165,7 +167,7 @@ less efficient than setting all items at once via set_items.
 
 Sets the text of a single menu item. The item must exist already.
 
-    set_item_action(idx: int, action)
+    set_item_id(idx: int, id)
 
 Sets the action of a single menu item. The item must exist already.
 
@@ -230,14 +232,15 @@ Plugin file structure
 
 The plugin does not have any third-party dependencies. This section is provided for those who want to trim the code down to the absolute minimum number of files required. 
 
-You *must* include the LICENSE file.
+   1. You *must* include the LICENSE file.
 
-The main work is done by the script `RadialMenu.gd`. It has several internal dependencies:  `drawing_library.gd` and `dark_default_theme.tres` are required (via preload). You need to copy at least these three files into your own projects to get a working RadialMenu control. Also copy the `addons/RadialMenu/icons` folder or create your own. The icons inside it are referenced in the code and there is currently no way to reconfigure these except by changing the relevant constants at the top of `RadialMenu.gd`, but replacing the icons with your own should work.
+   2. The main work is done by the script `addons/RadialMenu/RadialMenu.gd`. It has several internal dependencies:  `drawing_library.gd` and `dark_default_theme.tres` are required. You need to copy at least these three files into your own projects to get a working RadialMenu control. Also copy the `addons/RadialMenu/icons` folder or create your own. The icons inside it are referenced in the code and there is currently no way to reconfigure these except by changing the relevant constants at the top of `RadialMenu.gd`, but simply replacing the icons will work.
 
- `radial_menu_plugin.gd` and `plugin.cfg` are there for plugin initialisation if you want to use the RadialMenu control via the Godot plugin system. 
+   3. `addons/RadialMenu/RadialMenu.tscn` is optional; it is only needed if you want to create RadialMenus by _instancing_ this scene.
+
+   4. `radial_menu_plugin.gd` and `plugin.cfg` are there for plugin initialisation if you want to use the RadialMenu control via the Godot plugin system. Otherwise they are optional.
 
  All other files, including those under `addons/RadialMenu/Demo`, are optional. 
-
 
 
 Known Bugs and Caveats
