@@ -238,7 +238,7 @@ The plugin does not have any third-party dependencies. This section is provided 
 
    3. `addons/RadialMenu/RadialMenu.tscn` is optional; it is only needed if you want to create RadialMenus by _instancing_ this scene.
 
-   4. `radial_menu_plugin.gd` and `plugin.cfg` are there for plugin initialisation if you want to use the RadialMenu control via the Godot plugin system. Otherwise they are optional.
+   4. `addons/RadialMenu/radial_menu_plugin.gd` and `addons/RadialMenu/plugin.cfg` are there for plugin initialisation if you want to use the RadialMenu control via the Godot plugin system. Otherwise they are optional.
 
  All other files, including those under `addons/RadialMenu/Demo`, are optional. 
 
