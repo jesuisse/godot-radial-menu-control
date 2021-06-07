@@ -1,5 +1,12 @@
 extends Object
 
+"""
+(c) 2021 by Pascal Schuppli
+
+This code is licensed under the MIT license. See LICENSE file for details.
+"""
+
+
 const RAD_360 := 2*PI
 const RAD_270 := 1.5*PI
 const RAD_180 := PI
