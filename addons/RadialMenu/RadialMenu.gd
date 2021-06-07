@@ -288,7 +288,6 @@ func _draw():
 		_draw_center()
 
 
-
 func _draw_center():
 	if is_submenu:
 		return
@@ -302,7 +301,7 @@ func _draw_center():
 		tex = BACK_TEXTURE
 	draw_circle(center_offset, center_radius, bg)
 	draw_arc(center_offset, center_radius, 0, 2*PI, center_radius, fg, 2, true)
-	draw_texture(tex, center_offset-CLOSE_TEXTURE.get_size()/2)
+	draw_texture(tex, center_offset-CLOSE_TEXTURE.get_size()/2, _get_color("Icon Modulation"))
 
 
 func setup_gamepad(deviceid : int, xaxis : int, yaxis: int, deadzone : float = JOY_DEADZONE):
@@ -418,20 +417,16 @@ func activate_selected():
 		signal_action()	
 
 		
-func _connect_submenu_signals(submenu):
-	var tween = submenu.get_node("Tween")
+func _connect_submenu_signals(submenu):	
 	submenu.connect("about_to_show", submenu, "_about_to_show")
-	submenu.connect("visibility_changed", submenu, "_on_visibility_changed")
-	#tween.connect("tween_all_completed", submenu, "_on_Tween_tween_all_completed")
+	submenu.connect("visibility_changed", submenu, "_on_visibility_changed")	
 	submenu.connect("item_selected", self, "_on_submenu_item_selected")
 	submenu.connect("item_hovered", self, "_on_submenu_item_hovered")
 	submenu.connect("cancelled", self, "_on_submenu_cancelled")
 
-func _disconnect_submenu_signals(submenu):
-	var tween = submenu.get_node("Tween")
+func _disconnect_submenu_signals(submenu):	
 	submenu.disconnect("about_to_show", submenu, "_about_to_show")
-	submenu.disconnect("visibility_changed", submenu, "_on_visibility_changed")
-	#tween.disconnect("tween_all_completed", submenu, "_on_Tween_tween_all_completed")
+	submenu.disconnect("visibility_changed", submenu, "_on_visibility_changed")	
 	submenu.disconnect("item_selected", self, "_on_submenu_item_selected")
 	submenu.disconnect("item_hovered", self, "_on_submenu_item_hovered")
 	submenu.disconnect("cancelled", self, "_on_submenu_cancelled")
@@ -621,17 +616,7 @@ func set_selected_item(itemidx):
 	selected = itemidx
 	if selected != -1:
 		emit_signal("item_hovered", menu_items[selected])
-	
-	"""
-	if selected != -1:
-		var item = menu_items[itemidx]
-		if item != null:
-			$ShortInfo.text = menu_items[itemidx][1]
-		else:
-			$ShortInfo.text = ''
-	else:
-		$ShortInfo.text = "Cancel"
-	"""
+		
 	update()
 
 func open_menu(center_position: Vector2):

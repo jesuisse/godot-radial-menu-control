@@ -3,7 +3,7 @@ Radial Menu Control
 
 This code provides a radial menu control node for the Godot Engine (also called a "pie menu") with support for submenus. It supports keyboard, mouse and gamepad input. You can define the basic look of the control using themes:
 
-<img src="doc/RadialMenu/LightvsDarkTheme.png">
+<img src="addons/RadialMenu/doc/LightvsDarkTheme.png">
 
 You can also change how much of a full ring is covered by the menu, how wide the ring is and what radius it has, where the thin colored decorator/selector ring is placed and so on using exported properties. For example, in the image above, the second ring (the submenu) is configured to appear as an arc, while the main menu appears as a full ring.
 
@@ -83,7 +83,7 @@ The main parameters are the menu radius (always measured from the center to the 
 
 Colors and some size constants such as the width of the decorator ring/arc and the selector segment can be configured via themes. See the provided light and dark themes for an example.
 
-<img src="doc/RadialMenu/config-naming.svg.png" width="450px">
+<img src="addons/RadialMenu/doc/config-naming.svg.png" width="450px">
 
 
 Public Properties
