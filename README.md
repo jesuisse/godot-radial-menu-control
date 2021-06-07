@@ -7,14 +7,8 @@ This code provides a radial menu control node for the Godot Engine (also called 
 
 You can also change how much of a full ring is covered by the menu, how wide the ring is and what radius it has, where the thin colored decorator/selector ring is placed and so on using exported properties. For example, in the image above, the second ring (the submenu) is configured to appear as an arc, while the main menu appears as a full ring.
 
-Required files
---------------
+A short demo video of the radial menu control is available at https://youtu.be/uATC5JfqUkI.
 
-The main work is done by the script `RadialMenu.gd`. It has several dependencies:  `drawing_library.gd` and `dark_default_theme.tres` are required. You need to copy at least these three files into your own projects to get a working RadialMenu control. Also copy the `addons/RadialMenu/icons` folder or create your own. The icons inside it are referenced in the code and there is currently no way to reconfigure these, but replacing the icons with your own should work.
-
- `radial_menu_plugin.gd` and `plugin.cfg` are there for plugin initialisation if you want to use the RaidalMenu control via the Godot plugin system. Instead of using the plugin, you can also instance `RadialMenu.tscn` in your scene to get a preconfigured radial menu. 
-
- All other files, including those under `addons/RadialMenu/Demo`, are completely optional.
 
 Setup
 -----
@@ -39,7 +33,7 @@ Note that adding children to the RadialMenu node currently has no effect, but th
 
 The radial menu control node inherits from the builtin Popup node and as such has all the behaviour of popups.  This means that you must provide some code to *open* the popup; the radial menu is hidden by default when you run the scene.
 
-There are three Demo scenes under `addons/RadialMenu/Demo/RadialDemo.tscn` that show you how to configure a main menu and a couple of submenus. 
+There are three Demo scenes under `addons/RadialMenu/Demo/RadialDemo[123].tscn` with working radial menus, including one with submenus.
 
 The radial menu comes preconfigured with 7 dummy entries with star icons which you must reconfigure in order to make it usable. If your menu shows 7 star items, you've forgotten to configure the menu items.
 
@@ -55,9 +49,11 @@ Menu items are configured as a list of dictionaries:
     # assuming that menu references your RadialMenu node...
     menu.set_items(items)
 
-The method `set_items` takes such a list and reconfigures the menu items. You can also manipulate the `menu_items`-property directly.
+The method `set_items` takes such a list and reconfigures the menu items. You can also manipulate the `menu_items`-property directly. 
 
 If the value for an item's action key is a RadialMenu node, it will be treated as a **submenu** and opened when the menu item is activated. See `RadialDemo3.tscn` for an example.
+
+**Note:** Although the title key currently isn't used, it will be displayed by default in a later version, so in order to remain compatible with future versions, *do provide* a *short* title for each menu item.
 
 Signals
 -------
@@ -229,14 +225,27 @@ Also, currently stacking multiple radial submenus doesn't quite work (though it 
 Finally, if you enable the menu animation, you should provide the user with a way to turn the animation off, because it _does_ slow down some people.
 
 
-Bugs and Caveats
-----------------
+Plugin file structure
+---------------------
+
+The plugin does not have any third-party dependencies. This section is provided for those who want to trim the code down to the absolute minimum number of files required. 
+
+You *must* include the LICENSE file.
+
+The main work is done by the script `RadialMenu.gd`. It has several internal dependencies:  `drawing_library.gd` and `dark_default_theme.tres` are required (via preload). You need to copy at least these three files into your own projects to get a working RadialMenu control. Also copy the `addons/RadialMenu/icons` folder or create your own. The icons inside it are referenced in the code and there is currently no way to reconfigure these except by changing the relevant constants at the top of `RadialMenu.gd`, but replacing the icons with your own should work.
+
+ `radial_menu_plugin.gd` and `plugin.cfg` are there for plugin initialisation if you want to use the RadialMenu control via the Godot plugin system. 
+
+ All other files, including those under `addons/RadialMenu/Demo`, are optional. 
+
+
+
+Known Bugs and Caveats
+-----------------------
 
 This is version 1.0.0. There are bound to be bugs. Please report bugs you encounter so they can be fixed.
 
-The RadialMenu code uses the CanvasItem drawing functions to draw the menu. 
-Antialiased drawing seems to work more reliably on the GLES2 backend than on
-GLES3.
+The RadialMenu code uses the CanvasItem drawing functions to draw the menu. Antialiased drawing seems to work more reliably on the GLES2 backend than on GLES3.
 
 
 License
