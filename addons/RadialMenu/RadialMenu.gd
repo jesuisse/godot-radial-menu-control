@@ -580,9 +580,10 @@ func _get_constant(name):
 
 func _clear_items():
 	var n = $ItemIcons
-	for node in n.get_children():
-		n.remove_child(node)	
-		node.queue_free()
+	if n != null:
+		for node in n.get_children():
+			n.remove_child(node)	
+			node.queue_free()
 	
 
 func get_itemindex_from_vector(v: Vector2):
