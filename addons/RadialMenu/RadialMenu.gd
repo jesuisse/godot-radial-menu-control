@@ -560,7 +560,7 @@ func get_icon_radius():
 	if selector_position == Position.outside:
 		so_width = _get_constant("SelectorSegmentWidth")
 	if decorator_ring_position == Position.outside:
-		dr_width = _get_constant("DecoratorRing Width")
+		dr_width = _get_constant("DecoratorRingWidth")
 	return radius - width/2.0 - max(so_width, dr_width)
 
 		
