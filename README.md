@@ -1,7 +1,7 @@
 Radial Menu Control
 ===================
 
-This code provides a radial menu control node for the Godot Engine (also called a "pie menu") with support for submenus. It supports keyboard, mouse and gamepad input. You can define the basic look of the control using themes:
+This code provides a radial menu control node for Godot Engine 4 (also called a "pie menu") with support for submenus. It supports keyboard, mouse and gamepad input. You can define the basic look of the control using themes:
 
 <img src="addons/RadialMenu/doc/LightvsDarkTheme.png">
 
@@ -20,16 +20,16 @@ There are three alternative ways to set up your radial menu:
    1. Activate the RadialMenu *plugin* in your project settings and then add a radial menu to your scene tree using the new RadialMenu node that should become available with plugin activation.
 
    2. Preload the RadialMenu.gd Script in your script and then create a new RadialMenu
-      via script:
+	  via script:
 
-    # Preload the script and call it 'RadialMenu'
-    const RadialMenu = preload("path_to/addons/RadialMenu/RadialMenu.gd")
-    ...
-    # create a radial menu
-    var menu = RadialMenu.new()    
+	# Preload the script and call it 'RadialMenu'
+	const RadialMenu = preload("path_to/addons/RadialMenu/RadialMenu.gd")
+	...
+	# create a radial menu
+	var menu = RadialMenu.new()    
 
    3. Instance the provided `RadialMenu.tscn` scene in your own scene tree. The 
-      scene contains a single Popup node that has the `RadialMenu.gd` script attached.
+	  scene contains a single Popup node that has the `RadialMenu.gd` script attached.
 
 Note that adding children to the RadialMenu node currently has no effect, but this may change in later versions, so *do not add children to a radial menu* in your scene tree if you want to make sure later versions will still work.
 
@@ -41,15 +41,15 @@ The radial menu comes preconfigured with 7 dummy entries with star icons which y
 
 Menu items are configured as a list of dictionaries:
 
-    var items = [
-       {'texture': SOME_TEXTURE, 
-        'title': 'A short title', 
-        'id': 'anything, really'
-       },
-       ...
-    ]
-    # assuming that menu references your RadialMenu node...
-    menu.set_items(items)
+	var items = [
+	   {'texture': SOME_TEXTURE, 
+		'title': 'A short title', 
+		'id': 'anything, really'
+	   },
+	   ...
+	]
+	# assuming that menu references your RadialMenu node...
+	menu.set_items(items)
 
 The method `set_items` takes such a list and reconfigures the menu items. You can also manipulate the `menu_items`-property directly. 
 
@@ -68,6 +68,10 @@ A radial menu control node emits three signals:
 
    3. `cancelled()`
 
+   4. `menu_opened(menu)`
+
+   5. `menu_closed(menu)`
+
 The `item_selected` signal is emitted when a menu item is chosen and 
 accepted via one of the supported input methods. `position` returns the original position at which the menu was opened via a call to `open_menu`.
 
@@ -76,7 +80,6 @@ accepted as the user's choice; for example when the mouse first hovers over it.
 
 The `cancelled` signal is emitted when the user closes the menu without having made a choice.
 
-No special signal is emitted when a submenu is openend. If you are interested in that event, you can use the `about_to_show` signal provided by the popup.
 
 Configuration options
 ---------------------
@@ -93,56 +96,56 @@ Public Properties
 
 All the following properties are considered to belong to the public interface; you can acess and change these properties at will. All of these properties except `menu_items` are also exported by the script and can be changed directly in the Godot editor.
 
-    menu_items
+	menu_items
 
 A list of dictionaries containing 'texture', 'title' and 'action' keys (at least). You can
 also use the `set_items` method instead.
 
-    radius 
+	radius 
 
 Sets the radius of the menu.
 
-    width
+	width
 
 Sets the width of the ring that holds the menu items.
 
-    center_radius
+	center_radius
 
 Sets the radius of the center ring. If you set it to 0, the center won't be drawn.
 
-    circle_coverage : float
+	circle_coverage : float
 
 Determines how much of a full circle the menu covers. Must be a value between 0 and 1, though values below a certain treshold (the exact number varies depending on radius, width etc) don't make sense.
 
-    center_angle : float
+	center_angle : float
 
 Sets the angle where the center of the radial arc is located. Values are in radians. The default is -PI/2, e.g. the arc is centered at 12 o'Clock.
 
-    selector_position 
+	selector_position 
 
 Sets the position of the selector. It's either `Position.off`, `Position.inside` (default), or `Position.outside`.
 
-    decorator_position
+	decorator_position
 
 Sets the position of the decorator ring. It's either `Position.off`, `Position.inside` (default), or `Position.outside`.
 
-    show_animation : bool
+	show_animation : bool
 
 A boolean which controls whether animations are enabled (default) or disabled. 
 
-    animation_speed_factor: float
+	animation_speed_factor: float
 
 This changes the speed of the animation. Smaller values get you a faster animation. Ignored if `show_animation` is false.
 
-    outside_selection_factor : float
+	outside_selection_factor : float
 
 A float which determines how far beyond the ring the mouse can still select a menu item. The factor is in ring widths, so a value of 0 means the mouse won't select outside of the ring at all, and 1 means the mouse will select up to a full ring width beyond the outer edge of the ring. Defaults to 3.
 
-    icon_scale : float
+	icon_scale : float
 
 Factor by which icons are scaled. This is applied to all textures provided via `menu_items`. Defaults to 1.
 
-    default_theme : Theme
+	default_theme : Theme
 
 Provides default values for colors and some constants which are used unless another active theme has entries for RadialMenu, which will override those of the default theme. Two example themes are provided; the dark one is the standard. Don't clear the default theme! You don't need to bother with the default theme property if you're providing your own theme - you can just use the `theme` property instead.
 
@@ -150,48 +153,48 @@ Provides default values for colors and some constants which are used unless anot
 Public Methods
 --------------
 
-    set_items(items)
+	set_items(items)
 
 Sets all menu items at once. You can also set the `menu_items` property directly.
 
-    open_menu(center_position: Vector2)
+	open_menu(center_position: Vector2)
 
 Opens the RadialMenu (e.g. makes it visible at the given position). Do not place the menu yourself and call `show()`; use this method instead.
 
-    add_icon_item(texture : Texture, title: String, id)
+	add_icon_item(texture : Texture, title: String, id)
 
 Adds an item represented by an icon to the menu. Note: Calling add_icon_item is
 less efficient than setting all items at once via set_items.
 
-    set_item_text(idx: int, title: String)
+	set_item_text(idx: int, title: String)
 
 Sets the text of a single menu item. The item must exist already.
 
-    set_item_id(idx: int, id)
+	set_item_id(idx: int, id)
 
 Sets the action of a single menu item. The item must exist already.
 
-    set_item_icon(idx: int, texture: Texture)
+	set_item_icon(idx: int, texture: Texture)
 
 Sets the icon of a single menu item. The item must exist already.
 
-    select_next()
+	select_next()
 
 Selects the next item in clockwise order.
 
-    select_prev()
+	select_prev()
 
 Selects the previous item in clockwise order (e.g. the next counterclockwise).
 
-    has_open_submenu()
+	has_open_submenu()
 
 Returns true if a submenu is active, false if not.
 
-    get_open_submenu()
+	get_open_submenu()
 
 Returns the submenu object if one is currently active, or null.
 
-    setup_gamepad(deviceid : int, xaxis: int, yaxis: int, deadzone: float)
+	setup_gamepad(deviceid : int, xaxis: int, yaxis: int, deadzone: float)
 
 
 
@@ -246,13 +249,13 @@ The plugin does not have any third-party dependencies. This section is provided 
 Known Bugs and Caveats
 -----------------------
 
-This is version 1.0.0. There are bound to be bugs. Please report bugs you encounter so they can be fixed.
+This is version 1.1. There are bound to be bugs. Please report bugs you encounter so they can be fixed.
 
-The RadialMenu code uses the CanvasItem drawing functions to draw the menu. Antialiased drawing seems to work more reliably on the GLES2 backend than on GLES3.
-
+The RadialMenu started life as a Popup in Godot 3, but is now a Control node, as Popup has been moved to another branch of the class tree
+in Godot 4, which is missing relevant functionality. So now there are positioning issues when you make the RadialMenu a child of a 
+Control container. A workaround is to create a Node of class "Node" in the scene tree and make the RadialMenu a child of the node.
 
 License
 -------
 
 See the LICENSE file. The code is licensed to you under the MIT license.
-

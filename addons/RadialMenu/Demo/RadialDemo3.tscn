@@ -1,100 +1,80 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=5 format=3 uid="uid://cuqniiohe2b05"]
 
-[ext_resource path="res://addons/RadialMenu/Demo/RadialDemo3.gd" type="Script" id=2]
-[ext_resource path="res://addons/RadialMenu/RadialMenu.tscn" type="PackedScene" id=3]
-[ext_resource path="res://addons/RadialMenu/Demo/Rock_02_CGBookcase.jpg" type="Texture" id=5]
+[ext_resource type="Script" path="res://addons/RadialMenu/Demo/RadialDemo3.gd" id="2"]
+[ext_resource type="PackedScene" uid="uid://iopwhmejcr8b" path="res://addons/RadialMenu/RadialMenu.tscn" id="3"]
+[ext_resource type="Texture2D" uid="uid://cw3acqv2fdu0g" path="res://addons/RadialMenu/Demo/Rock_02_CGBookcase.jpg" id="5"]
 
-[sub_resource type="StyleBoxFlat" id=1]
-bg_color = Color( 0.113725, 0.113725, 0.113725, 1 )
+[sub_resource type="StyleBoxFlat" id="1"]
+bg_color = Color(0.113725, 0.113725, 0.113725, 1)
 
 [node name="RadialMenuDemo3" type="PanelContainer"]
+clip_contents = true
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-rect_clip_content = true
 size_flags_horizontal = 3
 size_flags_vertical = 3
-custom_styles/panel = SubResource( 1 )
-script = ExtResource( 2 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
+theme_override_styles/panel = SubResource("1")
+script = ExtResource("2")
 
 [node name="Background" type="HBoxContainer" parent="."]
-margin_right = 1024.0
-margin_bottom = 600.0
+layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="LeftThrid" type="ColorRect" parent="Background"]
-margin_right = 338.0
-margin_bottom = 600.0
+layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="MiddleThird" type="ColorRect" parent="Background"]
-margin_left = 342.0
-margin_right = 681.0
-margin_bottom = 600.0
+layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-color = Color( 0.164706, 0.164706, 0.164706, 1 )
+color = Color(0.164706, 0.164706, 0.164706, 1)
 
 [node name="RightThird" type="ColorRect" parent="Background"]
-margin_left = 685.0
-margin_right = 1024.0
-margin_bottom = 600.0
-rect_clip_content = true
+clip_contents = true
+layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="TextureRect" type="TextureRect" parent="Background/RightThird"]
+layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
-texture = ExtResource( 5 )
-expand = true
+texture = ExtResource("5")
+expand_mode = 1
 stretch_mode = 2
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Instructions" type="Label" parent="."]
-margin_top = 284.0
-margin_right = 1024.0
-margin_bottom = 315.0
+layout_mode = 2
 size_flags_horizontal = 7
 size_flags_vertical = 6
 text = "Click anywhere with the right mouse button 
 to open the radial menu."
-align = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="MenuResult" type="Label" parent="."]
-margin_left = 443.0
-margin_top = 550.0
-margin_right = 580.0
-margin_bottom = 600.0
-rect_min_size = Vector2( 0, 50 )
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 10
 text = "Nothing selected yet."
-align = 1
 max_lines_visible = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
-[node name="RadialMenu" parent="." instance=ExtResource( 3 )]
-margin_left = 0.0
-margin_top = 0.0
-margin_right = 260.0
-margin_bottom = 260.0
-rect_min_size = Vector2( 260, 260 )
-rect_pivot_offset = Vector2( 130, 130 )
-radius = 130
-width = 50
-circle_coverage = 1.0
-center_angle = -1.02
-icon_scale = 0.7
-[connection signal="item_selected" from="RadialMenu" to="." method="_on_ArcPopupMenu_item_selected"]
+[node name="Node" type="Node" parent="."]
+
+[node name="RadialMenu" parent="Node" instance=ExtResource("3")]
+visible = false
+custom_minimum_size = Vector2(270, 176.743)
+offset_right = 270.0
+offset_bottom = 176.743
+pivot_offset = Vector2(135, 135)
+radius = 135
+center_radius = 21
+circle_coverage = 0.6
+center_angle = -1.571
+animation_speed_factor = 0.12
+icon_scale = 0.6
+
+[connection signal="item_selected" from="Node/RadialMenu" to="." method="_on_ArcPopupMenu_item_selected"]

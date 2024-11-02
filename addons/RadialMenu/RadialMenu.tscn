@@ -1,21 +1,15 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=2 format=3 uid="uid://iopwhmejcr8b"]
 
-[ext_resource path="res://addons/RadialMenu/RadialMenu.gd" type="Script" id=1]
+[ext_resource type="Script" path="res://addons/RadialMenu/RadialMenu.gd" id="1"]
 
-[node name="RadialMenu" type="Popup"]
-margin_left = 0.749146
-margin_top = 1.20634
-margin_right = 200.749
-margin_bottom = 149.382
-rect_min_size = Vector2( 200, 148.175 )
-rect_pivot_offset = Vector2( 100, 100 )
+[node name="RadialMenu" type="Control"]
+custom_minimum_size = Vector2(300, 222.263)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 300.0
+offset_bottom = 222.263
+pivot_offset = Vector2(150, 150)
 size_flags_horizontal = 0
 size_flags_vertical = 0
-script = ExtResource( 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-radius = 100
-width = 40
-center_radius = 25
-icon_scale = 0.9
+script = ExtResource("1")
+show_animation = true

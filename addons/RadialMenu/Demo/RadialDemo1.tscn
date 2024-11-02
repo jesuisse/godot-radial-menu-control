@@ -1,37 +1,30 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=3 format=3 uid="uid://cvk15wv8stgp5"]
 
-[ext_resource path="res://addons/RadialMenu/RadialMenu.gd" type="Script" id=1]
-[ext_resource path="res://addons/RadialMenu/Demo/RadialDemo1.gd" type="Script" id=2]
+[ext_resource type="Script" path="res://addons/RadialMenu/RadialMenu.gd" id="1"]
+[ext_resource type="Script" path="res://addons/RadialMenu/Demo/RadialDemo1.gd" id="2"]
 
 [node name="RadialDemo1" type="ColorRect"]
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-color = Color( 0.145098, 0.270588, 0.333333, 1 )
-script = ExtResource( 2 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
+color = Color(0.145098, 0.270588, 0.333333, 1)
+script = ExtResource("2")
 
-[node name="RadialMenu" type="Popup" parent="."]
-visible = true
-margin_right = 300.0
-margin_bottom = 222.263
-rect_min_size = Vector2( 300, 222.263 )
-rect_pivot_offset = Vector2( 150, 150 )
+[node name="RadialMenu" type="Control" parent="."]
+custom_minimum_size = Vector2(300, 222.263)
+anchors_preset = 0
+offset_right = 300.0
+offset_bottom = 222.263
+pivot_offset = Vector2(150, 150)
 size_flags_horizontal = 0
 size_flags_vertical = 0
-script = ExtResource( 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
+script = ExtResource("1")
 
 [node name="Instructions" type="Label" parent="."]
+layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
 size_flags_horizontal = 5
 text = "Open the radial menu with a right mouse button click"
-align = 1
-valign = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
+horizontal_alignment = 1
+vertical_alignment = 1

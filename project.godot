@@ -6,35 +6,36 @@
 ;   [section] ; section goes between []
 ;   param=value ; assign values to parameters
 
-config_version=4
-
-_global_script_classes=[  ]
-_global_script_class_icons={
-
-}
+config_version=5
 
 [application]
 
 config/name="Radial Menu"
+config/description="Provides a Radial Menu control (aka Pie Menu) with submenus."
+config/version="1.1"
 run/main_scene="res://addons/RadialMenu/Demo/RadialDemo3.tscn"
+config/features=PackedStringArray("4.3")
 run/low_processor_mode=true
-config/icon="res://icon.png"
+config/icon="res://addons/RadialMenu/icons/radial_menu.svg"
+
+[dotnet]
+
+project/assembly_name="Radial Menu"
 
 [editor_plugins]
 
-enabled=PoolStringArray( "RadialMenu" )
+enabled=PackedStringArray("RadialMenu")
 
 [input]
 
 test={
 "deadzone": 0.5,
-"events": [ Object(InputEventJoypadMotion,"resource_local_to_scene":false,"resource_name":"","device":0,"axis":0,"axis_value":-1.0,"script":null)
- ]
+"events": [Object(InputEventJoypadMotion,"resource_local_to_scene":false,"resource_name":"","device":0,"axis":0,"axis_value":-1.0,"script":null)
+]
 }
 
 [rendering]
 
+anti_aliasing/quality/msaa_2d=2
 quality/driver/driver_name="GLES2"
 vram_compression/import_etc=true
-vram_compression/import_etc2=false
-environment/default_environment="res://default_env.tres"

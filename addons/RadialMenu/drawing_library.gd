@@ -1,7 +1,7 @@
 extends Object
 
 """
-(c) 2021 by Pascal Schuppli
+(c) 2021-2024 by Pascal Schuppli
 
 This code is licensed under the MIT license. See LICENSE file for details.
 """
@@ -19,9 +19,9 @@ static func calc_circle_coordinates(radius, npoints, angle_offset=0, offset=Vect
 	The first point lies at 3 o'clock unless you specify an <angle_offset>
 	(in radians)
 	
-	Returns a PoolVector2Array with the coordinates.
+	Returns a PackedVector2Array with the coordinates.
 	"""
-	var coords = PoolVector2Array()
+	var coords = PackedVector2Array()
 	var angle = RAD_360 / npoints
 	for i in range(npoints):
 		var y = radius * sin(angle_offset + i*angle)
@@ -32,7 +32,7 @@ static func calc_circle_coordinates(radius, npoints, angle_offset=0, offset=Vect
 
 static func calc_arc_AABB(radius, start_angle, end_angle, center=Vector2.ZERO) -> Rect2:
 	"""
-	Calculates the Axis-Aligned Bounding Box of the arc defined by the parameters.
+	Calculates the axis-aligned bounding box of the arc defined by the parameters.
 	"""
 	if end_angle-start_angle > RAD_360 - 0.0001:
 		return Rect2(center.x-radius, center.y-radius, 2*radius, 2*radius)
@@ -72,7 +72,7 @@ static func calc_ring_segment(inner_radius, outer_radius, start_angle, end_angle
 	"""
 	Calculates the coordinates of a ring segment
 	"""	
-	var coords = PoolVector2Array()
+	var coords = PackedVector2Array()
 	var fraction_of_full = (end_angle - start_angle) / RAD_360
 	var nopoints = max(2, int(outer_radius * fraction_of_full))
 	var nipoints = max(2, int(inner_radius * fraction_of_full))	
@@ -90,7 +90,7 @@ static func calc_ring_segment(inner_radius, outer_radius, start_angle, end_angle
 
 
 static func calc_ring_segment_centers(radius, n_points, start_angle, end_angle, offset=Vector2.ZERO):
-	var coords = PoolVector2Array()
+	var coords = PackedVector2Array()
 	var angle = (end_angle - start_angle) / n_points
 	for i in range(n_points):
 		var y = radius * sin(start_angle + i*angle)
@@ -109,7 +109,7 @@ static func calc_ring_segment_AABB(inner, outer, start_angle, end_angle, center=
 	return i_aabb.merge(o_aabb)
 
 
-static func draw_ring_segment(canvas : CanvasItem, coords : PoolVector2Array, fill_color, stroke_color=null, width=1.0, antialiased=true):
+static func draw_ring_segment(canvas : CanvasItem, coords : PackedVector2Array, fill_color, stroke_color=null, width=1.0, antialiased=true):
 	"""
 	Draws a segment of a ring. The ring coordinates must be passed in; they can be
 	generated with calc_ring_segment.
@@ -120,10 +120,10 @@ static func draw_ring_segment(canvas : CanvasItem, coords : PoolVector2Array, fi
 	if coords.size() == 0:
 		return
 	if fill_color:
-		canvas.draw_colored_polygon(coords, fill_color, PoolVector2Array(), null, null, antialiased)
+		canvas.draw_colored_polygon(coords, fill_color, PackedVector2Array(), null)
 	if stroke_color:	
 		canvas.draw_polyline(coords, stroke_color, width, antialiased)
-		canvas.draw_line(coords[-1], coords[0], stroke_color, width, antialiased)
+		canvas.draw_line(coords[-1], coords[0], stroke_color, width)
 
 
 static func draw_ring(canvas : CanvasItem, inner_radius : float, outer_radius : float, fill_color, stroke_color=null, width=1.0, antialiased=true, offset=Vector2.ZERO):
@@ -138,9 +138,9 @@ static func draw_ring(canvas : CanvasItem, inner_radius : float, outer_radius : 
 	var coords_inner
 	var coords_outer
 	if stroke_color != null:
-		coords_inner = PoolVector2Array()
-		coords_outer = PoolVector2Array()
-	var coords_all = PoolVector2Array()		
+		coords_inner = PackedVector2Array()
+		coords_outer = PackedVector2Array()
+	var coords_all = PackedVector2Array()		
 	var nopoints = max(2, int(outer_radius))
 	var nipoints = max(2, int(inner_radius))
 	var full360 = 2*PI
@@ -163,10 +163,9 @@ static func draw_ring(canvas : CanvasItem, inner_radius : float, outer_radius : 
 		coords_all.append(v+offset)
 	
 	if stroke_color:
-		canvas.draw_colored_polygon(coords_all, fill_color, PoolVector2Array(), null, null, false)	
+		canvas.draw_colored_polygon(coords_all, fill_color, PackedVector2Array(), null)	
 	else:
-		canvas.draw_colored_polygon(coords_all, fill_color, PoolVector2Array(), null, null, antialiased)	
+		canvas.draw_colored_polygon(coords_all, fill_color, PackedVector2Array(), null)	
 	if stroke_color:
 		canvas.draw_polyline(coords_inner, stroke_color, width, antialiased)
 		canvas.draw_polyline(coords_outer, stroke_color, width, antialiased)
-
