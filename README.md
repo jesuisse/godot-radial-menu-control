@@ -13,7 +13,7 @@ You can also change many menu geometry settings, such as how much of a full ring
 
 <img src="addons/RadialMenu/doc/ExportedProperties.png">
 
-A short demo video of the radial menu control is available at https://youtu.be/uATC5JfqUkI.
+A short demo video of the radial menu control is available at https://youtu.be/uATC5JfqUkI. A live demo ist available at https://www.phar.ch/2024/godot-radial-menu-demo/RadialMenu.html
 
 
 Setup
@@ -124,6 +124,10 @@ Determines how much of a full circle the menu covers. Must be a value between 0 
 	center_angle : float
 
 Sets the angle where the center of the radial arc is located. Values are in radians. The default is -PI/2, e.g. the arc is centered at 12 o'Clock.
+
+	gap_size
+
+Sets the size of the gaps between the individual ring/arc segments.
 
 	selector_position 
 
