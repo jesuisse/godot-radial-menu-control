@@ -73,7 +73,7 @@ static func calc_ring_segment(inner_radius, outer_radius, start_angle, end_angle
 	Calculates the coordinates of a ring segment
 	"""	
 	var coords = PackedVector2Array()
-	var fraction_of_full = (end_angle - start_angle) / RAD_360
+	var fraction_of_full = (end_angle - start_angle) / RAD_360 
 	var nopoints = max(2, int(outer_radius * fraction_of_full))
 	var nipoints = max(2, int(inner_radius * fraction_of_full))	
 	var angle = (end_angle - start_angle) / nopoints
@@ -89,9 +89,13 @@ static func calc_ring_segment(inner_radius, outer_radius, start_angle, end_angle
 	return coords	
 
 
-static func calc_ring_segment_centers(radius, n_points, start_angle, end_angle, offset=Vector2.ZERO):
+static func calc_ring_segment_centers(radius, n_points, start_angle, end_angle, offset=Vector2.ZERO, last_included=false):
 	var coords = PackedVector2Array()
-	var angle = (end_angle - start_angle) / n_points
+	var angle
+	if last_included:
+		angle = (end_angle - start_angle) / (n_points-1)
+	else:
+		angle = (end_angle - start_angle) / n_points
 	for i in range(n_points):
 		var y = radius * sin(start_angle + i*angle)
 		var x = radius * cos(start_angle + i*angle)
@@ -123,7 +127,7 @@ static func draw_ring_segment(canvas : CanvasItem, coords : PackedVector2Array, 
 		canvas.draw_colored_polygon(coords, fill_color, PackedVector2Array(), null)
 	if stroke_color:	
 		canvas.draw_polyline(coords, stroke_color, width, antialiased)
-		canvas.draw_line(coords[-1], coords[0], stroke_color, width)
+		canvas.draw_line(coords[-1], coords[0], stroke_color, width, antialiased)
 
 
 static func draw_ring(canvas : CanvasItem, inner_radius : float, outer_radius : float, fill_color, stroke_color=null, width=1.0, antialiased=true, offset=Vector2.ZERO):
@@ -169,3 +173,33 @@ static func draw_ring(canvas : CanvasItem, inner_radius : float, outer_radius : 
 	if stroke_color:
 		canvas.draw_polyline(coords_inner, stroke_color, width, antialiased)
 		canvas.draw_polyline(coords_outer, stroke_color, width, antialiased)
+
+static func rad2deg(rad):
+	return rad / (2*PI) * 360
+
+	
+static func calc_faux_ring_segment(inner_radius, outer_radius, separation : float, start_angle, end_angle, offset=Vector2.ZERO) -> PackedVector2Array:
+	
+	var sep_inner_angle = asin(separation / inner_radius)
+	var sep_outer_angle = asin(separation / outer_radius)
+	
+	# this limits the gap to avoid creating very strange-looking
+	# gaps or invalid polygons
+	if sep_inner_angle > 0.18 * (end_angle - start_angle):
+		sep_inner_angle = 0.18 * (end_angle - start_angle)
+	if sep_outer_angle > 0.18 * (end_angle - start_angle):
+		sep_outer_angle = 0.18 * (end_angle - start_angle)
+	
+	var inner_start = start_angle + sep_inner_angle
+	var inner_end = end_angle - sep_inner_angle
+		
+	var outer_start = start_angle + sep_outer_angle
+	var outer_end = end_angle - sep_outer_angle
+			
+	var fraction_of_full = (end_angle - start_angle) / RAD_360 
+	var nopoints = max(2, int(outer_radius * fraction_of_full))
+	var nipoints = max(2, int(inner_radius * fraction_of_full))	
+	
+	var coords = calc_ring_segment_centers(outer_radius, nopoints, outer_start, outer_end, offset, true)	
+	coords.append_array(calc_ring_segment_centers(inner_radius, nipoints, inner_end, inner_start, offset, true))
+	return coords

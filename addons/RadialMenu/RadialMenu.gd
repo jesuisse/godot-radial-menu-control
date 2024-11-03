@@ -54,20 +54,21 @@ enum Position { off, inside, outside }
 ## Defines the menu ring width
 @export var width := 50: set = _set_width
 @export var center_radius := 20: set = _set_center_radius
+@export_range(0, 30, 0.5) var gap_size := 3.0: set = _set_gap_size
 @export var selector_position: Position = Position.inside: set = _set_selector_position
 @export var decorator_ring_position: Position = Position.inside: set = _set_decorator_ring_position
 ## The percentage of a full circle that will be covered by the ring
-@export var circle_coverage = 0.66: set = _set_circle_coverage
+@export_range(0.1, 1.0, 0.05) var circle_coverage = 0.65: set = _set_circle_coverage
 ## The angle where the center of the ring segment will be (if circle_coverage is less than 1) in radians
-@export var center_angle = -PI/2: set = _set_center_angle
+@export_range(0.0, 2*PI, 0.01745) var center_angle = -PI/2: set = _set_center_angle
 ## Make sure that if you set this to true, you provide a way to turn it off for the user, as this may
 ## slow down frequent users of your software.
 @export var show_animation := false
 
-@export var animation_speed_factor = 0.2 # (float, 0.01, 1.0, 0.01)
+@export_range(0.01, 1.0, 0.01) var animation_speed_factor := 0.2 
 ## This defines how far outside the ring the mouse will still select a ring segment, as a 
 ## as a multiplication factor of the radius.
-@export var outside_selection_factor = 3.0 # (float, 0, 10, 0.5)
+@export_range(0, 10, 0.5) var outside_selection_factor := 3.0 
 ## Scales the icons by this factor
 @export var icon_scale := 1.0: set = _set_icon_scale
 
@@ -133,6 +134,12 @@ func _set_width(new_width):
 func _set_center_radius(new_radius):
 	center_radius = new_radius
 	queue_redraw()	
+
+func _set_gap_size(new_gap_size):
+	gap_size = new_gap_size
+	# Note: We do not need to recalculate the ring geometry because the gaps 
+	# only exist visually; they do not influence anything else.
+	queue_redraw()
 
 func _set_selector_position(new_position):
 	selector_position = new_position
@@ -273,6 +280,19 @@ func _handle_actions(event):
 		get_viewport().set_input_as_handled()
 		activate_selected()
 
+
+func _calc_segment(inner, outer, start, end) -> PackedVector2Array:	
+	# We switch to a no-gap version of the polygon calculation for narrow segments
+	# (heuristic: less than about 10 degrees) because the faux (gap-enabled) ring
+	# segment calculation will return invalid polygons when the segments get too
+	# narrow.
+	if abs(end-start) < 0.2 or gap_size == 0:
+		# the version without gaps between segments
+		return Draw.calc_ring_segment(inner, outer, start, end, center_offset)
+	else:
+		# the version with gaps between segments
+		return Draw.calc_faux_ring_segment(inner, outer, gap_size, start, end, center_offset)
+	
 	
 func _draw():
 	var count = menu_items.size()	
@@ -285,33 +305,40 @@ func _draw():
 	var inner = inout[0]
 	var outer = inout[1]
 	
+	var sw = _get_constant("StrokeWidth")
+	
 	# Draw the background for each menu item
-	for i in range(count):	
-		var coords = Draw.calc_ring_segment(inner, outer, start_angle+i*item_angle, start_angle+(i+1)*item_angle, center_offset)
+	for i in range(count):			
+		var coords = _calc_segment(inner, outer, start_angle+i*item_angle, start_angle+(i+1)*item_angle)		
 		if i == selected: 
-			Draw.draw_ring_segment(self, coords, _get_color("SelectedBackground"), _get_color("SelectedStroke"), 0.5, true)
+			Draw.draw_ring_segment(self, coords, _get_color("SelectedBackground"), _get_color("SelectedStroke"), sw, true)
 		else:
-			Draw.draw_ring_segment(self, coords, _get_color("Background"), _get_color("Stroke"), 0.5, true)
+			Draw.draw_ring_segment(self, coords, _get_color("Background"), _get_color("Stroke"), sw, true)
 
-	# draw decorator ring segment
-	if decorator_ring_position == Position.outside:
-		var rw = _get_constant("DecoratorRingWidth")
-		var coords = Draw.calc_ring_segment(outer, outer + rw, start_angle, start_angle+count*item_angle, center_offset)		
-		Draw.draw_ring_segment(self, coords, _get_color("RingBackground"), _get_color("RingBackground"), 1, true)
-	elif decorator_ring_position == Position.inside:
-		var rw = _get_constant("DecoratorRingWidth")
-		var coords = Draw.calc_ring_segment(inner-rw, inner, start_angle, start_angle+count*item_angle, center_offset)
-		Draw.draw_ring_segment(self, coords, _get_color("RingBackground"), _get_color("RingBackground"), 1, true)
-		
+	var rw = _get_constant("DecoratorRingWidth")
+	var ring_bg = _get_color("RingBackground")
+	for i in range(count):
+		# draw decorator ring segment
+		if decorator_ring_position == Position.outside:	
+			#var coords = Draw.calc_ring_segment(outer, outer + rw, start_angle, start_angle+count*item_angle, center_offset)					
+			var coords = _calc_segment(outer, outer + rw, start_angle+i*item_angle, start_angle+(i+1)*item_angle)
+			Draw.draw_ring_segment(self, coords, ring_bg, ring_bg, 1, true)
+		elif decorator_ring_position == Position.inside:			
+			#var coords = Draw.calc_ring_segment(inner-rw, inner, start_angle, start_angle+count*item_angle, center_offset)			
+			var coords = _calc_segment(inner, inner-rw, start_angle+i*item_angle, start_angle+(i+1)*item_angle)
+			Draw.draw_ring_segment(self, coords, ring_bg, ring_bg, 1, true)
+			
 	# draw selection ring segment
 	if selected != -1 and not has_open_submenu():
 		var selector_size = _get_constant("SelectorSegmentWidth")		
 		var select_coords
 		if selector_position == Position.outside:
-			select_coords = Draw.calc_ring_segment(outer, outer+selector_size, start_angle+selected*item_angle, start_angle+(selected+1)*item_angle, center_offset)			
+			# TODO: Likely we need to swap the inner and outer radius here!			
+			select_coords = _calc_segment(outer, outer+selector_size, start_angle+selected*item_angle, start_angle+(selected+1)*item_angle)
 			Draw.draw_ring_segment(self, select_coords, _get_color("SelectorSegment"),_get_color("SelectorSegment"), 1, true)	
-		elif selector_position == Position.inside:
-			select_coords = Draw.calc_ring_segment(inner-selector_size, inner, start_angle+selected*item_angle, start_angle+(selected+1)*item_angle, center_offset)
+		elif selector_position == Position.inside:			
+			# TODO: Likely we need to swap the inner and outer radius here!
+			select_coords = _calc_segment(inner-selector_size, inner, start_angle+selected*item_angle, start_angle+(selected+1)*item_angle)
 			Draw.draw_ring_segment(self, select_coords, _get_color("SelectorSegment"), _get_color("SelectorSegment"), 1, true)	
 
 	if center_radius != 0:
@@ -744,7 +771,7 @@ func open_submenu(submenu, idx):
 	
 	submenu.decorator_ring_position = decorator_ring_position
 	submenu.center_angle = center_angle - (menu_items.size()/2.0*item_angle) + idx * item_angle + item_angle/2.0	
-	submenu.radius = radius + ring_width
+	submenu.radius = radius + ring_width + gap_size*2
 	submenu.center_radius = center_radius  # submenu needs this to determine whether to draw labels
 	submenu.is_submenu = true		
 	submenu.position = moved_to_position - submenu.center_offset

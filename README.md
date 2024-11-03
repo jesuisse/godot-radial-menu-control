@@ -1,11 +1,15 @@
 Radial Menu Control
 ===================
 
-This code provides a radial menu control node for Godot Engine 4 (also called a "pie menu") with support for submenus. It supports keyboard, mouse and rudimentary gamepad input. You can define the basic look of the control using themes:
+This code provides a radial menu control node for Godot Engine 4 (also called a "pie menu") with support for submenus:
+
+<img src="addons/RadialMenu/doc/radial_menu_demo3.png">
+	
+It supports keyboard, mouse and gamepad input. You can define the basic look of the control using themes:
 
 <img src="addons/RadialMenu/doc/LightvsDarkTheme.png">
 
-You can also change some menu geometry settings, such as how much of a full ring is covered by the menu, the radius and width of the ring/arc via exported properties:
+You can also change many menu geometry settings, such as how much of a full ring is covered by the menu, the radius and width of the ring/arc via exported properties:
 
 <img src="addons/RadialMenu/doc/ExportedProperties.png">
 
@@ -240,7 +244,7 @@ The plugin does not have any third-party dependencies. This section is provided 
 
    1. You *must* include the LICENSE file and, if you use the provided NotoSans-Regular.ttf font, the Noto-Sans-OFL.txt (it's license).
 
-   2. The main work is done by the script `addons/RadialMenu/RadialMenu.gd`. It has several internal dependencies:  `drawing_library.gd` and `dark_default_theme.tres` are required. `dark_default_theme.tres` in turn requires the NotoSansRegular.ttf font. You need to copy at least these four files into your own projects to get a working RadialMenu control. Also copy the `addons/RadialMenu/icons` folder or create your own. The icons inside it are referenced in the code and there is currently no way to reconfigure these except by changing the relevant constants at the top of `RadialMenu.gd`, but simply replacing the icons will work.
+   2. The main work is done by the script `addons/RadialMenu/RadialMenu.gd`. It has several internal dependencies:  `drawing_library.gd` and `dark_default_theme.tres` are required. `dark_default_theme.tres` in turn requires `the NotoSans-Regular.ttf` font. You need to copy at least these four files into your own projects to get a working RadialMenu control. Also copy the `addons/RadialMenu/icons` folder or create your own. The icons inside it are referenced in the code and there is currently no way to reconfigure these except by changing the relevant constants at the top of `RadialMenu.gd`, but simply replacing the icons will work.
 
    3. `addons/RadialMenu/RadialMenu.tscn` is optional; it is only needed if you want to create RadialMenus by _instancing_ this scene.
 
@@ -260,4 +264,5 @@ Control container. A workaround is to put a Node of class "Node" between the con
 License
 -------
 
-See the LICENSE file. The code is licensed to you under the MIT license.
+See the LICENSE file. The code is licensed to you under the MIT license. The License for the Noto Sans Regular TrueType-Font can be found in the 
+Noto-Sans-OFL.txt` file.

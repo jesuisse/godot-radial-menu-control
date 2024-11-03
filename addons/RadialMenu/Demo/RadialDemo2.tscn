@@ -8,13 +8,16 @@
 script = ExtResource("2")
 
 [node name="RadialMenu" parent="." instance=ExtResource("2_royl4")]
-custom_minimum_size = Vector2(240, 177.81)
-offset_right = 240.0
-offset_bottom = 177.81
-pivot_offset = Vector2(120, 120)
+custom_minimum_size = Vector2(239.511, 226.708)
+offset_right = 239.511
+offset_bottom = 226.708
+pivot_offset = Vector2(120, 106.708)
 radius = 120
 width = 60
 center_radius = 35
+gap_size = 3
 selector_position = 2
 decorator_ring_position = 2
+circle_coverage = 0.66
+center_angle = 2.1638
 default_theme = ExtResource("3_icj7k")

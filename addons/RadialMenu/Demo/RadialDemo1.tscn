@@ -7,7 +7,7 @@
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-color = Color(0.145098, 0.270588, 0.333333, 1)
+color = Color(0.123112, 0.168494, 0.207031, 1)
 script = ExtResource("2")
 
 [node name="Instructions" type="Label" parent="."]
@@ -20,15 +20,19 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="RadialMenu" type="Control" parent="."]
-custom_minimum_size = Vector2(300, 298.153)
+custom_minimum_size = Vector2(240, 240)
 anchors_preset = 0
-offset_right = 300.0
-offset_bottom = 298.153
-pivot_offset = Vector2(150, 150)
+offset_right = 240.0
+offset_bottom = 240.0
+pivot_offset = Vector2(120, 120)
 size_flags_horizontal = 0
 size_flags_vertical = 0
 script = ExtResource("1")
-width = 70
+radius = 120
+width = 55
 center_radius = 40
-circle_coverage = 0.95
+gap_size = 4.0
+circle_coverage = 1.0
+center_angle = 4.7115
 show_animation = true
+animation_speed_factor = 0.35
