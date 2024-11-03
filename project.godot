@@ -16,7 +16,7 @@ config/version="1.1"
 run/main_scene="res://addons/RadialMenu/Demo/RadialDemo3.tscn"
 config/features=PackedStringArray("4.3")
 run/low_processor_mode=true
-config/icon="res://addons/RadialMenu/icons/radial_menu.svg"
+config/icon="res://addons/RadialMenu/icons/radial_menu.png"
 
 [dotnet]
 

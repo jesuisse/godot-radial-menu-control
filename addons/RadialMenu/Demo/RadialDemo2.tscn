@@ -2,11 +2,19 @@
 
 [ext_resource type="Script" path="res://addons/RadialMenu/Demo/RadialDemo2.gd" id="2"]
 [ext_resource type="PackedScene" uid="uid://iopwhmejcr8b" path="res://addons/RadialMenu/RadialMenu.tscn" id="2_royl4"]
-[ext_resource type="Theme" path="res://addons/RadialMenu/light_default_theme.tres" id="3_icj7k"]
+[ext_resource type="Theme" uid="uid://bwbpbc6ab46x3" path="res://addons/RadialMenu/light_default_theme.tres" id="3_icj7k"]
 
 [node name="Node2D" type="Node2D"]
 script = ExtResource("2")
 
 [node name="RadialMenu" parent="." instance=ExtResource("2_royl4")]
-custom_minimum_size = Vector2(300, 222.263)
+custom_minimum_size = Vector2(240, 177.81)
+offset_right = 240.0
+offset_bottom = 177.81
+pivot_offset = Vector2(120, 120)
+radius = 120
+width = 60
+center_radius = 35
+selector_position = 2
+decorator_ring_position = 2
 default_theme = ExtResource("3_icj7k")

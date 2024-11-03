@@ -1,7 +1,7 @@
 Radial Menu Control
 ===================
 
-This code provides a radial menu control node for Godot Engine 4 (also called a "pie menu") with support for submenus. It supports keyboard, mouse and gamepad input. You can define the basic look of the control using themes:
+This code provides a radial menu control node for Godot Engine 4 (also called a "pie menu") with support for submenus. It supports keyboard, mouse and rudimentary gamepad input. You can define the basic look of the control using themes:
 
 <img src="addons/RadialMenu/doc/LightvsDarkTheme.png">
 
@@ -33,9 +33,9 @@ There are three alternative ways to set up your radial menu:
 
 Note that adding children to the RadialMenu node currently has no effect, but this may change in later versions, so *do not add children to a radial menu* in your scene tree if you want to make sure later versions will still work.
 
-The radial menu control node inherits from the builtin Popup node and as such has all the behaviour of popups.  This means that you must provide some code to *open* the popup; the radial menu is hidden by default when you run the scene.
+The radial menu control node inherits from the builtin Control node, but acts like a popup. This means that you must provide some code to *open* the popup; the radial menu is hidden by default when you run the scene.
 
-There are three Demo scenes under `addons/RadialMenu/Demo/RadialDemo[123].tscn` with working radial menus, including one with submenus.
+There are four Demo scenes under `addons/RadialMenu/Demo/RadialDemo[1234].tscn` with working radial menus, including one with submenus (Demo3).
 
 The radial menu comes preconfigured with 7 dummy entries with star icons which you must reconfigure in order to make it usable. If your menu shows 7 star items, you've forgotten to configure the menu items.
 
@@ -55,7 +55,7 @@ The method `set_items` takes such a list and reconfigures the menu items. You ca
 
 If the value for an item's action key is a RadialMenu node, it will be treated as a **submenu** and opened when the menu item is activated. See `RadialDemo3.tscn` for an example.
 
-**Note:** Although the title key currently isn't used, it will be displayed by default in a later version, so in order to remain compatible with future versions, *do provide* a *short* title for each menu item.
+Titles are shown in the center circle if there is enough space to display them and you haven't turned title display off.
 
 Signals
 -------
@@ -149,6 +149,9 @@ Factor by which icons are scaled. This is applied to all textures provided via `
 
 Provides default values for colors and some constants which are used unless another active theme has entries for RadialMenu, which will override those of the default theme. Two example themes are provided; the dark one is the standard. Don't clear the default theme! You don't need to bother with the default theme property if you're providing your own theme - you can just use the `theme` property instead.
 
+	show_titles: bool
+	
+Configures the display of titles. Currently, they are shown in the center circle of the menu if there is enough space to display them.
 
 Public Methods
 --------------
@@ -235,9 +238,9 @@ Plugin file structure
 
 The plugin does not have any third-party dependencies. This section is provided for those who want to trim the code down to the absolute minimum number of files required. 
 
-   1. You *must* include the LICENSE file.
+   1. You *must* include the LICENSE file and, if you use the provided NotoSans-Regular.ttf font, the Noto-Sans-OFL.txt (it's license).
 
-   2. The main work is done by the script `addons/RadialMenu/RadialMenu.gd`. It has several internal dependencies:  `drawing_library.gd` and `dark_default_theme.tres` are required. You need to copy at least these three files into your own projects to get a working RadialMenu control. Also copy the `addons/RadialMenu/icons` folder or create your own. The icons inside it are referenced in the code and there is currently no way to reconfigure these except by changing the relevant constants at the top of `RadialMenu.gd`, but simply replacing the icons will work.
+   2. The main work is done by the script `addons/RadialMenu/RadialMenu.gd`. It has several internal dependencies:  `drawing_library.gd` and `dark_default_theme.tres` are required. `dark_default_theme.tres` in turn requires the NotoSansRegular.ttf font. You need to copy at least these four files into your own projects to get a working RadialMenu control. Also copy the `addons/RadialMenu/icons` folder or create your own. The icons inside it are referenced in the code and there is currently no way to reconfigure these except by changing the relevant constants at the top of `RadialMenu.gd`, but simply replacing the icons will work.
 
    3. `addons/RadialMenu/RadialMenu.tscn` is optional; it is only needed if you want to create RadialMenus by _instancing_ this scene.
 
@@ -251,9 +254,8 @@ Known Bugs and Caveats
 
 This is version 1.1. There are bound to be bugs. Please report bugs you encounter so they can be fixed.
 
-The RadialMenu started life as a Popup in Godot 3, but is now a Control node, as Popup has been moved to another branch of the class tree
-in Godot 4, which is missing relevant functionality. So now there are positioning issues when you make the RadialMenu a child of a 
-Control container. A workaround is to create a Node of class "Node" in the scene tree and make the RadialMenu a child of the node.
+The RadialMenu started life as a Popup in Godot 3, but is now a Control node, as Popup has been moved to another branch of the class tree in Godot 4, which is missing relevant functionality. So now there are positioning issues when you make the RadialMenu a child of a 
+Control container. A workaround is to put a Node of class "Node" between the container and the RadialMenu; an example of how this works is given in Demo3.tscn.
 
 License
 -------

@@ -1,5 +1,4 @@
 extends PanelContainer
-
 """
 (c) 2021-2024 Pascal Schuppli
 
@@ -25,7 +24,7 @@ func create_submenu(parent_menu):
 	var submenu = RadialMenu.new()
 	# copy some important properties from the parent menu
 	submenu.circle_coverage = 0.45
-	submenu.width = parent_menu.width*1.25
+	submenu.width = parent_menu.width*0.8
 	submenu.default_theme = parent_menu.default_theme
 	submenu.show_animation = parent_menu.show_animation
 	submenu.animation_speed_factor = parent_menu.animation_speed_factor
@@ -43,13 +42,11 @@ func _ready():
 		
 	# Define the main menu's items
 	$Node/RadialMenu.menu_items = [
-		{'texture': SCALE_TEXTURE, 'title': "Reset\nscale", 'id': "action7"},		
-		{'texture': TWODEE_TEXTURE, 'title': "Axis\nSetup", 'id': submenu1}, 
-		{'texture': POINTS_TEXTURE, 'title': "Dataset\nSetup", 'id': submenu2},
-		{'texture': GRID_TEXTURE, 'title': "Grid\nSetup", 'id': submenu3},
-		{'texture': TOOL_TEXTURE, 'title': "Advanced\nTools", 'id': submenu4},
-		#{'texture': ORIGIN_TEXTURE, 'title': "Back to\norigin", 'id': "action5"},
-		#{'texture': SCALE_TEXTURE, 'title': "Reset\nscale", 'id': "action6"},		
+		{'texture': SCALE_TEXTURE, 'title': "Reset scale", 'id': "action1"},
+		{'texture': TWODEE_TEXTURE, 'title': "Axis Setup", 'id': submenu1}, 
+		{'texture': POINTS_TEXTURE, 'title': "Dataset Setup", 'id': submenu2},
+		{'texture': GRID_TEXTURE, 'title': "Grid Setup", 'id': submenu3},
+		{'texture': TOOL_TEXTURE, 'title': "Advanced Tools", 'id': submenu4},	
 	]
 
 	
@@ -63,4 +60,7 @@ func _input(event):
 
 
 func _on_ArcPopupMenu_item_selected(action, _position):
-	$MenuResult.text = str(action)
+	$MenuResult.text = str(action) + " selected"
+
+func _on_radial_menu_canceled() -> void:
+	$MenuResult.text = "Nothing selected yet"

@@ -1,8 +1,10 @@
-[gd_resource type="Theme" load_steps=2 format=3 uid="uid://6txfgg00boom"]
+[gd_resource type="Theme" load_steps=3 format=3 uid="uid://6txfgg00boom"]
 
 [ext_resource type="Texture2D" uid="uid://cy0wcmq53hail" path="res://addons/RadialMenu/icons/InterpLinear.svg" id="1"]
+[ext_resource type="FontFile" uid="uid://cby1inpgd8trr" path="res://addons/RadialMenu/NotoSans-Regular.ttf" id="2_m081s"]
 
 [resource]
+default_font_size = 24
 RadialMenu/colors/Background = Color(0.12549, 0.12549, 0.12549, 0.901961)
 RadialMenu/colors/CenterBackground = Color(0.0980392, 0.0980392, 0.0980392, 0.827451)
 RadialMenu/colors/CenterStroke = Color(0.188235, 0.556863, 0.776471, 1)
@@ -13,11 +15,14 @@ RadialMenu/colors/RingStroke = Color(0.0980392, 0.509804, 0.752941, 1)
 RadialMenu/colors/SelectedBackground = Color(0.219608, 0.580392, 0.894118, 0.901961)
 RadialMenu/colors/SelectedStroke = Color(0.203922, 0.556863, 0.996078, 1)
 RadialMenu/colors/SelectorSegment = Color(0.52549, 0.784314, 1, 1)
-RadialMenu/colors/Stroke = Color(0.713726, 0.713726, 0.713726, 1)
+RadialMenu/colors/Stroke = Color(0.207031, 0.207031, 0.207031, 1)
+RadialMenu/colors/TitleDisplay = Color(0.546875, 0.546875, 0.546875, 1)
 RadialMenu/constants/CenterRadius = 0
 RadialMenu/constants/DecoratorRingWidth = 5
 RadialMenu/constants/ItemRingWidth = 10
 RadialMenu/constants/RingStrokeWidth = 1
 RadialMenu/constants/SelectorSegmentWidth = 5
 RadialMenu/constants/StrokeWidth = 1
+RadialMenu/font_sizes/TitleFont = 20
+RadialMenu/fonts/TitleFont = ExtResource("2_m081s")
 RadialMenu/icons/Expand = ExtResource("1")

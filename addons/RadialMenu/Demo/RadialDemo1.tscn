@@ -10,16 +10,6 @@ anchor_bottom = 1.0
 color = Color(0.145098, 0.270588, 0.333333, 1)
 script = ExtResource("2")
 
-[node name="RadialMenu" type="Control" parent="."]
-custom_minimum_size = Vector2(300, 222.263)
-anchors_preset = 0
-offset_right = 300.0
-offset_bottom = 222.263
-pivot_offset = Vector2(150, 150)
-size_flags_horizontal = 0
-size_flags_vertical = 0
-script = ExtResource("1")
-
 [node name="Instructions" type="Label" parent="."]
 layout_mode = 0
 anchor_right = 1.0
@@ -28,3 +18,17 @@ size_flags_horizontal = 5
 text = "Open the radial menu with a right mouse button click"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="RadialMenu" type="Control" parent="."]
+custom_minimum_size = Vector2(300, 298.153)
+anchors_preset = 0
+offset_right = 300.0
+offset_bottom = 298.153
+pivot_offset = Vector2(150, 150)
+size_flags_horizontal = 0
+size_flags_vertical = 0
+script = ExtResource("1")
+width = 70
+center_radius = 40
+circle_coverage = 0.95
+show_animation = true

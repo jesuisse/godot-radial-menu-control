@@ -45,7 +45,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 texture = ExtResource("5")
 expand_mode = 1
-stretch_mode = 2
 
 [node name="Instructions" type="Label" parent="."]
 layout_mode = 2
@@ -53,6 +52,7 @@ size_flags_horizontal = 7
 size_flags_vertical = 6
 text = "Click anywhere with the right mouse button 
 to open the radial menu."
+horizontal_alignment = 1
 
 [node name="MenuResult" type="Label" parent="."]
 custom_minimum_size = Vector2(0, 50)
@@ -66,15 +66,14 @@ max_lines_visible = 1
 
 [node name="RadialMenu" parent="Node" instance=ExtResource("3")]
 visible = false
-custom_minimum_size = Vector2(270, 176.743)
-offset_right = 270.0
-offset_bottom = 176.743
-pivot_offset = Vector2(135, 135)
-radius = 135
-center_radius = 21
+custom_minimum_size = Vector2(300, 196.382)
+offset_bottom = 196.382
+width = 70
+center_radius = 50
 circle_coverage = 0.6
 center_angle = -1.571
 animation_speed_factor = 0.12
 icon_scale = 0.6
 
+[connection signal="canceled" from="Node/RadialMenu" to="." method="_on_radial_menu_canceled"]
 [connection signal="item_selected" from="Node/RadialMenu" to="." method="_on_ArcPopupMenu_item_selected"]

@@ -1,0 +1,22 @@
+[gd_scene load_steps=3 format=3 uid="uid://d4dihf485doh8"]
+
+[ext_resource type="Script" path="res://addons/RadialMenu/Demo/RadialDemo2.gd" id="1_1t142"]
+[ext_resource type="PackedScene" uid="uid://iopwhmejcr8b" path="res://addons/RadialMenu/RadialMenu.tscn" id="2_jbdd4"]
+
+[node name="Node2D" type="Node2D"]
+script = ExtResource("1_1t142")
+
+[node name="RadialMenu" parent="." instance=ExtResource("2_jbdd4")]
+visible = false
+custom_minimum_size = Vector2(440, 325.986)
+offset_right = 440.0
+offset_bottom = 325.986
+pivot_offset = Vector2(220, 220)
+radius = 220
+width = 120
+center_radius = 80
+selector_position = 2
+decorator_ring_position = 0
+animation_speed_factor = 0.1
+outside_selection_factor = 1.5
+icon_scale = 0.6
