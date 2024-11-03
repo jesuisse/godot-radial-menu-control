@@ -29,7 +29,7 @@ There are three alternative ways to set up your radial menu:
 	var menu = RadialMenu.new()    
 
    3. Instance the provided `RadialMenu.tscn` scene in your own scene tree. The 
-	  scene contains a single Popup node that has the `RadialMenu.gd` script attached.
+	  scene contains a single Control node that has the `RadialMenu.gd` script attached.
 
 Note that adding children to the RadialMenu node currently has no effect, but this may change in later versions, so *do not add children to a radial menu* in your scene tree if you want to make sure later versions will still work.
 
