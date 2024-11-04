@@ -348,7 +348,7 @@ func _draw():
 		_debug_draw()
 
 func _draw_center():
-	if not is_submenu:
+	if not is_submenu and center_radius > 0:
 		_draw_center_ring()
 	
 	if show_titles and (not has_open_submenu() or get_open_submenu().selected == -1):
@@ -362,8 +362,7 @@ func _draw_center_ring():
 		fg = _get_color("SelectorSegment")
 	
 	draw_circle(center_offset, center_radius, bg)
-	if not decorator_ring_position == Position.off:
-		draw_arc(center_offset, center_radius, 0, 2*PI, center_radius, fg, 2, true)
+	draw_arc(center_offset, center_radius, 0, 2*PI, center_radius, fg, 2, true)
 		
 	if not show_titles or selected == -1:
 		var tex = CLOSE_TEXTURE

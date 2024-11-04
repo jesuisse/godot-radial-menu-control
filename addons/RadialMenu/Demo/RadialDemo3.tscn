@@ -70,7 +70,6 @@ custom_minimum_size = Vector2(300, 196.382)
 offset_bottom = 196.382
 width = 70
 center_radius = 50
-gap_size = 3
 circle_coverage = 0.6
 center_angle = -1.571
 animation_speed_factor = 0.12
