@@ -88,9 +88,9 @@ The `cancelled` signal is emitted when the user closes the menu without having m
 Configuration options
 ---------------------
 
-The main parameters are the menu radius (always measured from the center to the the outermost edge) and the width of the ring which holds the items. The radial menu doesn't have to be a full ring; you can also configure it as an arc. The center of the arc can sit at any angle.
+Most of the geometry of the radial menu is configured directly via exported properties. The main parameters are the menu radius (always measured from the center to the the outermost edge) and the width of the ring which holds the items. The radial menu doesn't have to be a full ring; you can also configure it as an arc. The center of the arc can sit at any angle.
 
-All colors, some size constants such as the width of the decorator ring/arc and the selector segment, the font and the close and default placeholder icon can be configured via themes. See the provided light and dark themes for an example. You can create a copy of these themes and drop your own copy in the `theme` property.
+All colors, some size constants such as the width of the decorator ring/arc and the selector segment, the font and the close and default placeholder icon can be configured via themes. See the provided light and dark themes for an example. You can create a copy of these themes and drop your own copy in the `theme` property. See `RadialDemo2.tscn` for an example of how to override the dark default theme with the light default theme by setting the RadialMenu's `theme` property.
 
 <img src="addons/RadialMenu/doc/config-naming.svg.png" width="450px">
 
@@ -152,10 +152,6 @@ A float which determines how far beyond the ring the mouse can still select a me
 	icon_scale : float
 
 Factor by which icons are scaled. This is applied to all textures provided via `menu_items`. Defaults to 1.
-
-	default_theme : Theme
-
-Provides default values for colors and some constants which are used unless another active theme has entries for RadialMenu, which will override those of the default theme. Two example themes are provided; the dark one is the standard. Don't clear the default theme! You don't need to bother with the default theme property if you're providing your own theme - you can just use the `theme` property instead.
 
 	show_titles: bool
 	
