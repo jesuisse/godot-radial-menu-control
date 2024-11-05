@@ -225,13 +225,7 @@ func _radial_input(event):
 			
 	if event is InputEventMouseMotion:
 		set_selected_item(get_selected_by_mouse())
-		if has_open_submenu():
-			var sub_sel = get_open_submenu().selected
-			if sub_sel != last_selected_submenu_idx:
-				# this is needed to avoid display errors in the center. It requests some
-				# redraws which aren't required, but it's a cleaner and easier fix
-				queue_redraw()
-			last_selected_submenu_idx = sub_sel
+		redraw_if_submenu_selection_changed()		
 	elif event is InputEventJoypadMotion:
 		set_selected_item(get_selected_by_joypad())
 		return
@@ -476,6 +470,15 @@ func get_open_submenu():
 		return menu_items[active_submenu_idx].id
 	else:
 		return null
+
+func redraw_if_submenu_selection_changed():
+	# This is taking care of problems with the title display in the center
+	# when the submenu selection has changed
+	if has_open_submenu():
+		var sub_sel = get_open_submenu().selected
+		if sub_sel != last_selected_submenu_idx:
+			queue_redraw()
+			last_selected_submenu_idx = sub_sel
 
 func select_next():
 	"""
