@@ -65,7 +65,6 @@ max_lines_visible = 1
 [node name="Node" type="Node" parent="."]
 
 [node name="RadialMenu" parent="Node" instance=ExtResource("3")]
-visible = false
 custom_minimum_size = Vector2(300, 196.382)
 offset_bottom = 196.382
 width = 70

@@ -1,7 +1,9 @@
-[gd_resource type="Theme" load_steps=3 format=3 uid="uid://bwbpbc6ab46x3"]
+[gd_resource type="Theme" load_steps=5 format=3 uid="uid://bwbpbc6ab46x3"]
 
 [ext_resource type="Texture2D" uid="uid://cy0wcmq53hail" path="res://addons/RadialMenu/icons/InterpLinear.svg" id="1"]
 [ext_resource type="FontFile" uid="uid://cby1inpgd8trr" path="res://addons/RadialMenu/NotoSans-Regular.ttf" id="1_loamr"]
+[ext_resource type="Texture2D" uid="uid://fwcnc1qiysdx" path="res://addons/RadialMenu/icons/Close.svg" id="2_crjjd"]
+[ext_resource type="Texture2D" uid="uid://1wttp8ujexwq" path="res://addons/RadialMenu/icons/Favorites.svg" id="3_y25tb"]
 
 [resource]
 RadialMenu/colors/Background = Color(1, 1, 1, 0.901961)
@@ -24,4 +26,6 @@ RadialMenu/constants/SelectorSegmentWidth = 5
 RadialMenu/constants/StrokeWidth = 1
 RadialMenu/font_sizes/TitleFont = 16
 RadialMenu/fonts/TitleFont = ExtResource("1_loamr")
+RadialMenu/icons/Close = ExtResource("2_crjjd")
+RadialMenu/icons/DefaultPlaceholder = ExtResource("3_y25tb")
 RadialMenu/icons/Expand = ExtResource("1")

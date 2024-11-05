@@ -90,7 +90,7 @@ Configuration options
 
 The main parameters are the menu radius (always measured from the center to the the outermost edge) and the width of the ring which holds the items. The radial menu doesn't have to be a full ring; you can also configure it as an arc. The center of the arc can sit at any angle.
 
-Colors and some size constants such as the width of the decorator ring/arc and the selector segment can be configured via themes. See the provided light and dark themes for an example.
+All colors, some size constants such as the width of the decorator ring/arc and the selector segment, the font and the close and default placeholder icon can be configured via themes. See the provided light and dark themes for an example. You can create a copy of these themes and drop your own copy in the `theme` property.
 
 <img src="addons/RadialMenu/doc/config-naming.svg.png" width="450px">
 
@@ -248,7 +248,7 @@ The plugin does not have any third-party dependencies. This section is provided 
 
    1. You *must* include the LICENSE file and, if you use the provided NotoSans-Regular.ttf font, the Noto-Sans-OFL.txt (it's license).
 
-   2. The main work is done by the script `addons/RadialMenu/RadialMenu.gd`. It has several internal dependencies:  `drawing_library.gd` and `dark_default_theme.tres` are required. `dark_default_theme.tres` in turn requires `the NotoSans-Regular.ttf` font. You need to copy at least these four files into your own projects to get a working RadialMenu control. Also copy the `addons/RadialMenu/icons` folder or create your own. The icons inside it are referenced in the code and there is currently no way to reconfigure these except by changing the relevant constants at the top of `RadialMenu.gd`, but simply replacing the icons will work.
+   2. The main work is done by the script `addons/RadialMenu/RadialMenu.gd`. It has several internal dependencies:  `drawing_library.gd` and `dark_default_theme.tres` are required. `dark_default_theme.tres` in turn requires `the NotoSans-Regular.ttf` font. You need to copy at least these four files into your own projects to get a working RadialMenu control. Also copy the `addons/RadialMenu/icons` folder or create your own and reference them in the theme. 
 
    3. `addons/RadialMenu/RadialMenu.tscn` is optional; it is only needed if you want to create RadialMenus by _instancing_ this scene.
 

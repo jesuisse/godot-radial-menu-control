@@ -30,11 +30,6 @@ const DEBUG = false
 ## is provided by the user. See _get_constant, _get_color, _get_font, _getfontsize for fallback logic.
 const DEFAULT_THEME = preload("dark_default_theme.tres")
 
-## TODO: We should migrate these into the theme resource to make them configurable.
-const STAR_TEXTURE = preload("icons/Favorites.svg")
-const BACK_TEXTURE = preload("icons/Back.svg")
-const CLOSE_TEXTURE = preload("icons/Close.svg")
-
 const JOY_DEADZONE = 0.2
 const JOY_AXIS_RESCALE = 1.0/(1.0-JOY_DEADZONE)
 
@@ -74,20 +69,17 @@ enum Position { off, inside, outside }
 
 @export var show_titles := true: set = _set_titles_display
 
-# This stores the default colors and constants which will be overriden by a theme
-@export var default_theme : Theme = DEFAULT_THEME
-
 
 # default menu items. They are provided so a placeholder radial menu can be displayed in the editor
 # even before it is configured via code.
 var menu_items = [
-	{ 'texture': STAR_TEXTURE, 'title': 'Item 1', 'id': 'arc_id1'},
-	{ 'texture': STAR_TEXTURE, 'title': 'Item 2', 'id': 'arc_id2'},	
-	{ 'texture': STAR_TEXTURE, 'title': 'Item 3', 'id': 'arc_id3'},	
-	{ 'texture': STAR_TEXTURE, 'title': 'Item 4', 'id': 'arc_id4'},	
-	{ 'texture': STAR_TEXTURE, 'title': 'Item 5', 'id': 'arc_id5'},	
-	{ 'texture': STAR_TEXTURE, 'title': 'Item 6', 'id': 'arc_id6'},	
-	{ 'texture': STAR_TEXTURE, 'title': 'Item 7', 'id': 'arc_id7'},	
+	{ 'texture': _get_texture("DefaultPlaceholder"), 'title': 'Item 1', 'id': 'arc_id1'},
+	{ 'texture': _get_texture("DefaultPlaceholder"), 'title': 'Item 2', 'id': 'arc_id2'},	
+	{ 'texture': _get_texture("DefaultPlaceholder"), 'title': 'Item 3', 'id': 'arc_id3'},	
+	{ 'texture': _get_texture("DefaultPlaceholder"), 'title': 'Item 4', 'id': 'arc_id4'},	
+	{ 'texture': _get_texture("DefaultPlaceholder"), 'title': 'Item 5', 'id': 'arc_id5'},	
+	{ 'texture': _get_texture("DefaultPlaceholder"), 'title': 'Item 6', 'id': 'arc_id6'},	
+	{ 'texture': _get_texture("DefaultPlaceholder"), 'title': 'Item 7', 'id': 'arc_id7'},	
 ] : set = set_items
 
 # mostly used for animation
@@ -359,10 +351,10 @@ func _draw_center_ring():
 	draw_arc(center_offset, center_radius, 0, 2*PI, center_radius, fg, 2, true)
 		
 	if not show_titles or selected == -1:
-		var tex = CLOSE_TEXTURE
+		var tex = _get_texture("Close")
 		#if active_submenu_idx != -1:
 		#	tex = BACK_TEXTURE
-		draw_texture(tex, center_offset-CLOSE_TEXTURE.get_size()/2, _get_color("IconModulation"))
+		draw_texture(tex, center_offset-tex.get_size()/2, _get_color("IconModulation"))
 
 
 func _draw_label():	
@@ -661,26 +653,33 @@ func _get_color(name):
 	if has_theme_color(name, "RadialMenu"):
 		return get_theme_color(name, "RadialMenu")
 	else:
-		return default_theme.get_color(name, "RadialMenu")
+		return DEFAULT_THEME.get_color(name, "RadialMenu")
 
 func _get_constant(name):
 	""" Gets theme constant (or takes it from default theme) """
 	if has_theme_constant(name, "RadialMenu"):
 		return get_theme_constant(name, "RadialMenu")
 	else:
-		return default_theme.get_constant(name, "RadialMenu")
+		return DEFAULT_THEME.get_constant(name, "RadialMenu")
 
 func _get_font(name):
 	if has_theme_font(name, "RadialMenu"):
 		return get_theme_font(name, "RadialMenu")
 	else:
-		return default_theme.get_font(name, "RadialMenu")
+		return DEFAULT_THEME.get_font(name, "RadialMenu")
 
 func _get_fontsize(name):
 	if has_theme_font_size(name, "RadialMenu"):
 		return get_theme_font_size(name, "RadialMenu")
 	else:
-		return default_theme.get_font_size(name, "RadialMenu")
+		return DEFAULT_THEME.get_font_size(name, "RadialMenu")
+	
+func _get_texture(name):
+	if has_theme_icon(name, "RadialMenu"):
+		return get_theme_icon(name, "RadialMenu")
+	else:
+		return DEFAULT_THEME.get_icon(name, "RadialMenu")
+		
 	
 func _clear_items():
 	var n = $ItemIcons

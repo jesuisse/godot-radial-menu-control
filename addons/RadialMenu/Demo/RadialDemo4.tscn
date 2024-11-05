@@ -8,9 +8,9 @@ script = ExtResource("1_1t142")
 
 [node name="RadialMenu" parent="." instance=ExtResource("2_jbdd4")]
 visible = false
-custom_minimum_size = Vector2(440, 325.986)
+custom_minimum_size = Vector2(440, 319.878)
 offset_right = 440.0
-offset_bottom = 325.986
+offset_bottom = 319.878
 pivot_offset = Vector2(220, 220)
 radius = 220
 width = 120

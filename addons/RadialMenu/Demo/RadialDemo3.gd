@@ -24,8 +24,7 @@ func create_submenu(parent_menu):
 	var submenu = RadialMenu.new()
 	# copy some important properties from the parent menu
 	submenu.circle_coverage = 0.45
-	submenu.width = parent_menu.width*0.8
-	submenu.default_theme = parent_menu.default_theme
+	submenu.width = parent_menu.width*0.8	
 	submenu.show_animation = parent_menu.show_animation
 	submenu.animation_speed_factor = parent_menu.animation_speed_factor
 	return submenu
@@ -34,13 +33,13 @@ func create_submenu(parent_menu):
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	
-	# Create a few dummy submenus
+	# Create a few dummy submenus.
 	var submenu1 = create_submenu($Node/RadialMenu)
 	var submenu2 = create_submenu($Node/RadialMenu)
 	var submenu3 = create_submenu($Node/RadialMenu)
 	var submenu4 = create_submenu($Node/RadialMenu)
 		
-	# Define the main menu's items
+	# Define the main menu's items.
 	$Node/RadialMenu.menu_items = [
 		{'texture': SCALE_TEXTURE, 'title': "Reset scale", 'id': "action1"},
 		{'texture': TWODEE_TEXTURE, 'title': "Axis Setup", 'id': submenu1}, 
