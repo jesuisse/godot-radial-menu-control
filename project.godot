@@ -14,7 +14,7 @@ config/name="Radial Menu"
 config/description="Provides a Radial Menu control (aka Pie Menu) with submenus."
 config/version="1.1"
 run/main_scene="res://addons/RadialMenu/Demo/RadialDemo3.tscn"
-config/features=PackedStringArray("4.3")
+config/features=PackedStringArray("4.4")
 run/low_processor_mode=true
 config/icon="res://addons/RadialMenu/icons/radial_menu.png"
 
