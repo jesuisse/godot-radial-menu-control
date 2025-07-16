@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://iopwhmejcr8b"]
 
-[ext_resource type="Script" path="res://addons/RadialMenu/RadialMenu.gd" id="1"]
+[ext_resource type="Script" uid="uid://b1sp46prs8qy0" path="res://addons/RadialMenu/RadialMenu.gd" id="1"]
 
 [node name="RadialMenu" type="Control"]
 custom_minimum_size = Vector2(300, 222.263)

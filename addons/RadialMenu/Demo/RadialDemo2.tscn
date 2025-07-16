@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://8gio8223puqr"]
 
-[ext_resource type="Script" path="res://addons/RadialMenu/Demo/RadialDemo2.gd" id="2"]
+[ext_resource type="Script" uid="uid://cofqo4h6jujog" path="res://addons/RadialMenu/Demo/RadialDemo2.gd" id="2"]
 [ext_resource type="PackedScene" uid="uid://iopwhmejcr8b" path="res://addons/RadialMenu/RadialMenu.tscn" id="2_royl4"]
 [ext_resource type="Theme" uid="uid://bwbpbc6ab46x3" path="res://addons/RadialMenu/light_default_theme.tres" id="3_icj7k"]
 
