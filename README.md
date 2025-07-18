@@ -242,13 +242,11 @@ Plugin file structure
 
 The plugin does not have any third-party dependencies. This section is provided for those who want to trim the code down to the absolute minimum number of files required. 
 
-   1. You *must* include the LICENSE file and, if you use the provided NotoSans-Regular.ttf font, the Noto-Sans-OFL.txt (it's license).
+   1. The main work is done by the script `addons/RadialMenu/RadialMenu.gd`. It has several internal dependencies:  `drawing_library.gd` and `dark_default_theme.tres` are required. `dark_default_theme.tres` font. You need to copy at least these four files into your own projects to get a working RadialMenu control. Also copy the `addons/RadialMenu/icons` folder or create your own and reference them in the theme. 
 
-   2. The main work is done by the script `addons/RadialMenu/RadialMenu.gd`. It has several internal dependencies:  `drawing_library.gd` and `dark_default_theme.tres` are required. `dark_default_theme.tres` in turn requires `the NotoSans-Regular.ttf` font. You need to copy at least these four files into your own projects to get a working RadialMenu control. Also copy the `addons/RadialMenu/icons` folder or create your own and reference them in the theme. 
+   2. `addons/RadialMenu/RadialMenu.tscn` is optional; it is only needed if you want to create RadialMenus by _instancing_ this scene.
 
-   3. `addons/RadialMenu/RadialMenu.tscn` is optional; it is only needed if you want to create RadialMenus by _instancing_ this scene.
-
-   4. `addons/RadialMenu/radial_menu_plugin.gd` and `addons/RadialMenu/plugin.cfg` are there for plugin initialisation if you want to use the RadialMenu control via the Godot plugin system. Otherwise they are optional.
+   3. `addons/RadialMenu/radial_menu_plugin.gd` and `addons/RadialMenu/plugin.cfg` are there for plugin initialisation if you want to use the RadialMenu control via the Godot plugin system. Otherwise they are optional.
 
  All other files, including those under `addons/RadialMenu/Demo`, are optional. 
 
@@ -264,5 +262,4 @@ Control container. A workaround is to put a Node of class "Node" between the con
 License
 -------
 
-See the LICENSE file. The code is licensed to you under the MIT license. The License for the Noto Sans Regular TrueType-Font can be found in the 
-Noto-Sans-OFL.txt` file.
+See the LICENSE file. The code is licensed to you under the MIT license.
