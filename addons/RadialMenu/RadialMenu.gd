@@ -68,6 +68,8 @@ enum Position { off, inside, outside }
 @export var icon_scale := 1.0: set = _set_icon_scale
 
 @export var show_titles := true: set = _set_titles_display
+## If true, the title size will be ignored when laying out the menu items.
+@export var ignore_title_size := false
 
 
 # default menu items. They are provided so a placeholder radial menu can be displayed in the editor
@@ -366,7 +368,7 @@ func _draw_label():
 	var fontsize = _get_fontsize("TitleFont")	
 	var color = _get_color("TitleDisplay")
 	var size = font.get_string_size(text, HORIZONTAL_ALIGNMENT_CENTER, -1, fontsize)		
-	if center_radius > size.x / 2.0:
+	if ignore_title_size or center_radius > size.x / 2.0:
 		# show text if it fits inside the center ring
 		var pos = center_offset - Vector2(size.x/2.0, -font.get_descent())
 		draw_string(font, pos, text, HORIZONTAL_ALIGNMENT_CENTER, -1, fontsize, color)
