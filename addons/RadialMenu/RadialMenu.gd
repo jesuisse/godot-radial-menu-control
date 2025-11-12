@@ -520,7 +520,7 @@ func _disconnect_submenu_signals(submenu):
 
 
 func _clear_item_icons():
-	var p = $ItemIcons	
+	var p = get_node_or_null(ITEM_ICONS_NAME)
 	if not p:
 		return
 	for node in p.get_children():
@@ -554,6 +554,7 @@ func _create_item_icons():
 			
 	var coords = Draw.calc_ring_segment_centers(r, n, 
 		start_angle+half_angle, start_angle+half_angle+n*item_angle, center_offset)
+	var item_icons_node = get_node_or_null(ITEM_ICONS_NAME)
 	for i in range(n):
 		var item = menu_items[i]
 		if item != null:
@@ -563,7 +564,7 @@ func _create_item_icons():
 			sprite.texture = item.texture
 			sprite.scale = Vector2(icon_scale, icon_scale)
 			sprite.modulate = _get_color("IconModulation")
-			$ItemIcons.add_child(sprite)
+			item_icons_node.add_child(sprite)
 	_item_children_present = true
 
 
@@ -577,15 +578,15 @@ func _update_item_icons():
 	
 	# a heuristic - hide icons when they tend to outgrow their segment
 	if item_angle < 0.01 or r*(item_angle/2*PI) < width * icon_scale:
-		$ItemIcons.hide()		
+		get_node(ITEM_ICONS_NAME).hide()		
 	else:
-		$ItemIcons.show()		
+		get_node(ITEM_ICONS_NAME).show()		
 		
 	var coords = Draw.calc_ring_segment_centers(r, n, 
 		start_angle, start_angle+n*item_angle, center_offset)
 	var i = 0
 	var ni = 0
-	var item_nodes = $ItemIcons.get_children()	
+	var item_nodes = get_node(ITEM_ICONS_NAME).get_children()	
 	while i < n:		
 		var item = menu_items[i]		
 		if item != null:			
@@ -684,7 +685,7 @@ func _get_texture(name):
 		
 	
 func _clear_items():
-	var n = $ItemIcons
+	var n = get_node_or_null(ITEM_ICONS_NAME)
 	if not n:
 		return
 	for node in n.get_children():
