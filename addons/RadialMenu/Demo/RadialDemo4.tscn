@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://d4dihf485doh8"]
 
-[ext_resource type="Script" path="res://addons/RadialMenu/Demo/RadialDemo2.gd" id="1_1t142"]
+[ext_resource type="Script" uid="uid://cofqo4h6jujog" path="res://addons/RadialMenu/Demo/RadialDemo2.gd" id="1_1t142"]
 [ext_resource type="PackedScene" uid="uid://iopwhmejcr8b" path="res://addons/RadialMenu/RadialMenu.tscn" id="2_jbdd4"]
 
 [node name="Node2D" type="Node2D"]
