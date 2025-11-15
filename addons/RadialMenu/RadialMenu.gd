@@ -361,7 +361,7 @@ func _draw_center_ring():
 
 func _draw_label():	
 	var text
-	if selected == -1:
+	if selected < 0 or selected >= menu_items.size():
 		return	
 	text = menu_items[selected]['title']
 	var font = _get_font("TitleFont")
@@ -728,7 +728,7 @@ func set_selected_item(itemidx):
 		return
 	
 	selected = itemidx
-	if selected != -1:
+	if selected >= 0 and selected < menu_items.size():
 		emit_signal("item_hovered", menu_items[selected])
 		
 	queue_redraw()
