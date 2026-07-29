@@ -64,7 +64,7 @@ Titles are shown in the center circle if there is enough space to display them a
 Signals
 -------
 
-A radial menu control node emits three signals:
+A radial menu control node emits five signals:
 
    1. `item_selected(id, position)`
 
@@ -83,6 +83,10 @@ The `item_hovered` signal is emitted when a menu item is selected but not yet
 accepted as the user's choice; for example when the mouse first hovers over it.
 
 The `cancelled` signal is emitted when the user closes the menu without having made a choice.
+
+The `menu_opened` signal is emitted when the menu is opened (before the animation plays).
+
+The `menu_closed` signal is emitted when the menu is closed (before the animation plays).
 
 
 Configuration options
@@ -184,6 +188,10 @@ Sets the action of a single menu item. The item must exist already.
 	set_item_icon(idx: int, texture: Texture)
 
 Sets the icon of a single menu item. The item must exist already.
+
+	get_item_by_id(id) -> Dictionary
+
+Finds the menu item dictionary with the given id and returns it. Note: No submenu items are searched!
 
 	select_next()
 
