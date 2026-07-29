@@ -38,7 +38,7 @@ func _ready():
 	var submenu2 = create_submenu($Node/RadialMenu)
 	var submenu3 = create_submenu($Node/RadialMenu)
 	var submenu4 = create_submenu($Node/RadialMenu)
-		
+	
 	# Define the main menu's items.
 	$Node/RadialMenu.menu_items = [
 		{'texture': SCALE_TEXTURE, 'title': "Reset scale", 'id': "action1"},

@@ -1,17 +1,18 @@
-[gd_scene load_steps=4 format=3 uid="uid://8gio8223puqr"]
+[gd_scene format=3 uid="uid://8gio8223puqr"]
 
-[ext_resource type="Script" path="res://addons/RadialMenu/Demo/RadialDemo2.gd" id="2"]
+[ext_resource type="Script" uid="uid://dnc2d1ayrltsu" path="res://addons/RadialMenu/Demo/RadialDemo2.gd" id="2"]
 [ext_resource type="PackedScene" uid="uid://iopwhmejcr8b" path="res://addons/RadialMenu/RadialMenu.tscn" id="2_royl4"]
 [ext_resource type="Theme" uid="uid://bwbpbc6ab46x3" path="res://addons/RadialMenu/light_default_theme.tres" id="3_icj7k"]
 
-[node name="Node2D" type="Node2D"]
+[node name="Node2D" type="Node2D" unique_id=110989998]
 script = ExtResource("2")
 
-[node name="RadialMenu" parent="." instance=ExtResource("2_royl4")]
-custom_minimum_size = Vector2(239.511, 226.708)
-offset_right = 239.511
-offset_bottom = 226.708
-pivot_offset = Vector2(120, 106.708)
+[node name="RadialMenu" parent="." unique_id=1965196072 instance=ExtResource("2_royl4")]
+visible = false
+custom_minimum_size = Vector2(239.51056, 226.70755)
+offset_right = 239.51056
+offset_bottom = 226.70755
+pivot_offset = Vector2(120, 106.70756)
 theme = ExtResource("3_icj7k")
 radius = 120
 width = 60

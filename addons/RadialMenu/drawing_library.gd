@@ -1,26 +1,23 @@
 extends Object
 
 """
-(c) 2021-2024 by Pascal Schuppli
+(c) 2021-2026 by Pascal Schuppli
 
 This code is licensed under the MIT license. See LICENSE file for details.
+
+Note: When angles are concerned, parameters are in radians, not in degrees.
 """
 
-
-const RAD_360 := 2*PI
+const RAD_360 := 2.0*PI
 const RAD_270 := 1.5*PI
 const RAD_180 := PI
 const RAD_90 := 0.5*PI
 
-
-static func calc_circle_coordinates(radius, npoints, angle_offset=0, offset=Vector2.ZERO):
-	"""
-	Calculates <npoints> coordinates on a circle with a given <radius>.
-	The first point lies at 3 o'clock unless you specify an <angle_offset>
-	(in radians)
-	
-	Returns a PackedVector2Array with the coordinates.
-	"""
+## Calculates <npoints> coordinates on a circle with a given <radius>. 
+## The first point lies at 3 o'Clock unless you specify an <angle_offset>
+## (in radians)
+## Returns a PackedVector2Array with the coordinates.
+static func calc_circle_coordinates(radius: float, npoints: int, angle_offset := 0.0, offset := Vector2.ZERO) -> PackedVector2Array:
 	var coords = PackedVector2Array()
 	var angle = RAD_360 / npoints
 	for i in range(npoints):
@@ -29,11 +26,8 @@ static func calc_circle_coordinates(radius, npoints, angle_offset=0, offset=Vect
 		coords.append(Vector2(x, y)+offset)	
 	return coords
 
-
-static func calc_arc_AABB(radius, start_angle, end_angle, center=Vector2.ZERO) -> Rect2:
-	"""
-	Calculates the axis-aligned bounding box of the arc defined by the parameters.
-	"""
+## Calculates the axis-aligned bounding box of the arc defined by the parameters
+static func calc_arc_AABB(radius: float, start_angle: float, end_angle: float, center := Vector2.ZERO) -> Rect2:
 	if end_angle-start_angle > RAD_360 - 0.0001:
 		return Rect2(center.x-radius, center.y-radius, 2*radius, 2*radius)
 	start_angle = fposmod(start_angle, RAD_360)
@@ -67,11 +61,8 @@ static func calc_arc_AABB(radius, start_angle, end_angle, center=Vector2.ZERO) -
 	
 	return Rect2(minx + center.x, miny + center.y, maxx-minx, maxy-miny)
 
-
-static func calc_ring_segment(inner_radius, outer_radius, start_angle, end_angle, offset=Vector2.ZERO):
-	"""
-	Calculates the coordinates of a ring segment
-	"""	
+## Calculates the coordinates of a ring segment
+static func calc_ring_segment(inner_radius : float, outer_radius: float, start_angle: float, end_angle: float, offset := Vector2.ZERO) -> PackedVector2Array:
 	var coords = PackedVector2Array()
 	var fraction_of_full = (end_angle - start_angle) / RAD_360 
 	var nopoints = max(2, int(outer_radius * fraction_of_full))
@@ -89,7 +80,7 @@ static func calc_ring_segment(inner_radius, outer_radius, start_angle, end_angle
 	return coords	
 
 
-static func calc_ring_segment_centers(radius, n_points, start_angle, end_angle, offset=Vector2.ZERO, last_included=false):
+static func calc_ring_segment_centers(radius: float, n_points: int, start_angle: float, end_angle: float, offset := Vector2.ZERO, last_included := false) -> PackedVector2Array:
 	var coords = PackedVector2Array()
 	var angle
 	if last_included:
@@ -102,25 +93,19 @@ static func calc_ring_segment_centers(radius, n_points, start_angle, end_angle, 
 		coords.append(Vector2(x, y)+offset)
 	return coords
 
-
-static func calc_ring_segment_AABB(inner, outer, start_angle, end_angle, center=Vector2.ZERO) -> Rect2:
-	"""
-	Calculates the axis-aligned bounding box of a ring segment
-	"""
-	
+## Calculates the axis-aligned bounding box of a ring segment
+static func calc_ring_segment_AABB(inner: float, outer: float, start_angle: float, end_angle: float, center := Vector2.ZERO) -> Rect2:
 	var i_aabb = calc_arc_AABB(inner, start_angle, end_angle, center)	
 	var o_aabb = calc_arc_AABB(outer, start_angle, end_angle, center)
 	return i_aabb.merge(o_aabb)
 
 
-static func draw_ring_segment(canvas : CanvasItem, coords : PackedVector2Array, fill_color, stroke_color=null, width=1.0, antialiased=true):
-	"""
-	Draws a segment of a ring. The ring coordinates must be passed in; they can be
-	generated with calc_ring_segment.
-	
-	If fill_color is null, only the segment's outline will be drawn. If stroke_color
-	is null, no border outline will be drawn.
-	"""
+## Draws a segment of a ring. The ring coordinates must be passed in; they can be
+## generated with calc_ring_segment.
+##
+## If fill_color is null, only the segment's outline will be drawn. If stroke_color
+## is null, no border outline will be drawn.
+static func draw_ring_segment(canvas : CanvasItem, coords : PackedVector2Array, fill_color, stroke_color=null, width := 1.0, antialiased := true):
 	if coords.size() == 0:
 		return
 	if fill_color:
@@ -129,16 +114,11 @@ static func draw_ring_segment(canvas : CanvasItem, coords : PackedVector2Array, 
 		canvas.draw_polyline(coords, stroke_color, width, antialiased)
 		canvas.draw_line(coords[-1], coords[0], stroke_color, width, antialiased)
 
-
-static func draw_ring(canvas : CanvasItem, inner_radius : float, outer_radius : float, fill_color, stroke_color=null, width=1.0, antialiased=true, offset=Vector2.ZERO):
-	"""
-	Draws a ring.
-		
-	Caveat: If you draw an antialiased ring with a partially transparent fill_color
-			without a stroke, you will get an ugly seam where the polygon joins
-			itself.
-	"""
-	
+## Draws a ring.
+##
+## Caveat: If you draw an antialiased ring with a partially transparent fill_color
+## without a stroke, you will get an ugly seam where the polygon joins itself.
+static func draw_ring(canvas : CanvasItem, inner_radius : float, outer_radius : float, fill_color, stroke_color=null, width := 1.0, antialiased := true, offset := Vector2.ZERO):
 	var coords_inner
 	var coords_outer
 	if stroke_color != null:
@@ -174,11 +154,12 @@ static func draw_ring(canvas : CanvasItem, inner_radius : float, outer_radius : 
 		canvas.draw_polyline(coords_inner, stroke_color, width, antialiased)
 		canvas.draw_polyline(coords_outer, stroke_color, width, antialiased)
 
-static func rad2deg(rad):
-	return rad / (2*PI) * 360
+## Converts radians to degrees
+static func rad2deg(rad: float) -> float:
+	return rad / (2.0*PI) * 360.0
 
 	
-static func calc_faux_ring_segment(inner_radius, outer_radius, separation : float, start_angle, end_angle, offset=Vector2.ZERO) -> PackedVector2Array:
+static func calc_faux_ring_segment(inner_radius: float, outer_radius: float, separation: float, start_angle: float, end_angle: float, offset := Vector2.ZERO) -> PackedVector2Array:
 	
 	var sep_inner_angle = asin(separation / inner_radius)
 	var sep_outer_angle = asin(separation / outer_radius)

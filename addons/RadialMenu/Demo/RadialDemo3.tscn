@@ -1,13 +1,13 @@
-[gd_scene load_steps=5 format=3 uid="uid://cuqniiohe2b05"]
+[gd_scene format=3 uid="uid://cuqniiohe2b05"]
 
-[ext_resource type="Script" path="res://addons/RadialMenu/Demo/RadialDemo3.gd" id="2"]
+[ext_resource type="Script" uid="uid://cmt7tuwj77peh" path="res://addons/RadialMenu/Demo/RadialDemo3.gd" id="2"]
 [ext_resource type="PackedScene" uid="uid://iopwhmejcr8b" path="res://addons/RadialMenu/RadialMenu.tscn" id="3"]
-[ext_resource type="Texture2D" uid="uid://cw3acqv2fdu0g" path="res://addons/RadialMenu/Demo/Rock_02_CGBookcase.jpg" id="5"]
+[ext_resource type="Texture2D" uid="uid://cffa2w523ldig" path="res://addons/RadialMenu/Demo/Rock_02_CGBookcase.jpg" id="5"]
 
 [sub_resource type="StyleBoxFlat" id="1"]
 bg_color = Color(0.113725, 0.113725, 0.113725, 1)
 
-[node name="RadialMenuDemo3" type="PanelContainer"]
+[node name="RadialMenuDemo3" type="PanelContainer" unique_id=2010151283]
 clip_contents = true
 anchors_preset = 15
 anchor_right = 1.0
@@ -17,36 +17,36 @@ size_flags_vertical = 3
 theme_override_styles/panel = SubResource("1")
 script = ExtResource("2")
 
-[node name="Background" type="HBoxContainer" parent="."]
+[node name="Background" type="HBoxContainer" parent="." unique_id=1313530608]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="LeftThrid" type="ColorRect" parent="Background"]
+[node name="LeftThrid" type="ColorRect" parent="Background" unique_id=393522378]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="MiddleThird" type="ColorRect" parent="Background"]
+[node name="MiddleThird" type="ColorRect" parent="Background" unique_id=368180614]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 color = Color(0.164706, 0.164706, 0.164706, 1)
 
-[node name="RightThird" type="ColorRect" parent="Background"]
+[node name="RightThird" type="ColorRect" parent="Background" unique_id=258760047]
 clip_contents = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="TextureRect" type="TextureRect" parent="Background/RightThird"]
+[node name="TextureRect" type="TextureRect" parent="Background/RightThird" unique_id=890767164]
 layout_mode = 0
 anchor_right = 1.0
 anchor_bottom = 1.0
 texture = ExtResource("5")
 expand_mode = 1
 
-[node name="Instructions" type="Label" parent="."]
+[node name="Instructions" type="Label" parent="." unique_id=391283662]
 layout_mode = 2
 size_flags_horizontal = 7
 size_flags_vertical = 6
@@ -54,7 +54,7 @@ text = "Click anywhere with the right mouse button
 to open the radial menu."
 horizontal_alignment = 1
 
-[node name="MenuResult" type="Label" parent="."]
+[node name="MenuResult" type="Label" parent="." unique_id=131675026]
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -62,11 +62,12 @@ size_flags_vertical = 10
 text = "Nothing selected yet."
 max_lines_visible = 1
 
-[node name="Node" type="Node" parent="."]
+[node name="Node" type="Node" parent="." unique_id=1777569296]
 
-[node name="RadialMenu" parent="Node" instance=ExtResource("3")]
-custom_minimum_size = Vector2(300, 196.382)
-offset_bottom = 196.382
+[node name="RadialMenu" parent="Node" unique_id=1757209091 instance=ExtResource("3")]
+visible = false
+custom_minimum_size = Vector2(300, 196.3816)
+offset_bottom = 196.3816
 width = 70
 center_radius = 50
 circle_coverage = 0.6
