@@ -1,6 +1,7 @@
 @tool
-extends Control
-## Radial Menu Control für Godot 4.3 - 4.7 (and likely newer versions, too).
+@icon("icons/icon.png")
+class_name RadialMenu extends Control
+## Radial Menu Control for Godot 4.3 - 4.x 
 ##
 ## The control provides a radial menu with support for one level of submenues.
 ## It can be controlled via keyboard, mouse and gamepad.
@@ -213,8 +214,8 @@ func _ready():
 	_create_subtree()
 	item_angle = circle_coverage * 2.0 * PI / menu_items.size()		
 	if not is_submenu:
-		# (submenus get their signals connected and disconnected elsewhere)		
-		connect("visibility_changed", Callable(self, "_on_visibility_changed"))
+		# (submenus get their signals connected and disconnected elsewhere)
+		visibility_changed.connect(self._on_visibility_changed)				
 	_register_menu_child_nodes()
 	_calc_new_geometry()
 	size_flags_horizontal = 0
@@ -432,6 +433,9 @@ func get_selected_by_mouse() -> int:
 		s = get_itemindex_from_vector(mpos)
 	return s
 
+
+## Returns the index of the menu item that is currently selected by the gamepad
+## (or -1 when nothing is selected)
 func get_selected_by_joypad() -> int:
 	if has_open_submenu():
 		return active_submenu_idx
@@ -507,18 +511,17 @@ func activate_selected():
 		signal_id()	
 
 		
-func _connect_submenu_signals(submenu):	
-	submenu.connect("visibility_changed", Callable(submenu, "_on_visibility_changed"))	
-	submenu.connect("item_selected", Callable(self, "_on_submenu_item_selected"))
-	submenu.connect("item_hovered", Callable(self, "_on_submenu_item_hovered"))
-	submenu.connect("canceled", Callable(self, "_on_submenu_cancelled"))
+func _connect_submenu_signals(submenu : RadialMenu):
+	submenu.visibility_changed.connect(submenu._on_visibility_changed)	
+	submenu.item_selected.connect(_on_submenu_item_selected)	
+	submenu.item_hovered.connect(_on_submenu_item_hovered)	
+	submenu.canceled.connect(_on_submenu_cancelled)
 
-func _disconnect_submenu_signals(submenu):	
-	submenu.disconnect("visibility_changed", Callable(submenu, "_on_visibility_changed"))	
-	submenu.disconnect("item_selected", Callable(self, "_on_submenu_item_selected"))
-	submenu.disconnect("item_hovered", Callable(self, "_on_submenu_item_hovered"))
-	submenu.disconnect("canceled", Callable(self, "_on_submenu_cancelled"))
-
+func _disconnect_submenu_signals(submenu: RadialMenu):
+	submenu.visibility_changed.disconnect(submenu._on_visibility_changed)
+	submenu.item_selected.disconnect(_on_submenu_item_selected)	
+	submenu.item_hovered.disconnect(_on_submenu_item_hovered)	
+	submenu.canceled.disconnect(_on_submenu_cancelled)
 
 func _clear_item_icons():
 	var p = get_node_or_null(ITEM_ICONS_NAME)
@@ -692,7 +695,8 @@ func _clear_items():
 	
 func set_tween(property, final_value):
 	tween = create_tween()
-	tween.connect("finished", Callable(self, "_on_Tween_tween_all_completed"))			
+	tween.finished.connect(_on_Tween_tween_all_completed)
+	#tween.connect("finished", Callable(self, "_on_Tween_tween_all_completed"))			
 	tween.set_trans(Tween.TRANS_SINE)
 	tween.set_ease(Tween.EASE_IN)		
 	tween.tween_property(self, property, final_value, animation_speed_factor)
@@ -725,11 +729,11 @@ func get_itemindex_from_vector(v: Vector2):
 func set_selected_item(itemidx):
 	if selected == itemidx:
 		return
-	
+
 	selected = itemidx
-	if selected >= 0 and selected < menu_items.size():
-		emit_signal("item_hovered", menu_items[selected])
-		
+	if selected >= 0 and selected < menu_items.size():		
+		item_hovered.emit(menu_items[selected])
+
 	queue_redraw()
 
 ## Opens the menu at the given position.
@@ -760,7 +764,8 @@ func close_menu():
 		state = MenuState.closing
 		orig_item_angle = item_angle
 		set_tween("item_angle", 0.01)
-	emit_signal("menu_closed", self)
+	menu_closed.emit(self)
+	
 
 ## Opens a submenu
 func open_submenu(submenu, idx):	
@@ -839,9 +844,10 @@ func _on_Tween_tween_all_completed():
 ## Emits either a [signal item_selected] or [signal canceled] signal.
 func signal_id():
 	if selected != -1 and menu_items[selected] != null:
-		emit_signal("item_selected", menu_items[selected].id, opened_at_position)
+		item_selected.emit(menu_items[selected].id, opened_at_position)		
 	elif selected == -1:
-		emit_signal("canceled")
+		canceled.emit()
+	
 
 ## Changes the menu items. 
 ## [br]
@@ -919,8 +925,8 @@ func get_item_by_id(id: Variant) -> Dictionary:
 func _about_to_popup():
 	selected = -1
 	msecs_at_opened = Time.get_ticks_msec()	
-	opened_at_position = Vector2(offset_left + center_offset.x, offset_top + center_offset.y)	
-	emit_signal("menu_opened", self)
+	opened_at_position = Vector2(offset_left + center_offset.x, offset_top + center_offset.y)
+	menu_opened.emit(self)	
 	if show_animation:
 		orig_item_angle = item_angle
 		item_angle = 0.01
@@ -942,8 +948,9 @@ func _on_submenu_item_selected(id, position):
 	var submenu = get_open_submenu()
 	_disconnect_submenu_signals(submenu)	
 	active_submenu_idx = -1
-	close_menu()	
-	emit_signal("item_selected", id, opened_at_position)
+	close_menu()
+	item_selected.emit(id, opened_at_position)
+	
 
 
 func _on_submenu_item_hovered(_item):
