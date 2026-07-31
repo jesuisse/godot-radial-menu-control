@@ -159,7 +159,15 @@ Factor by which icons are scaled. This is applied to all textures provided via `
 
 	show_titles: bool
 	
-Configures the display of titles. Currently, they are shown in the center circle of the menu if there is enough space to display them.
+Enables or disables the display of titles. Currently, they are shown in the center circle of the menu if there is enough space to display them.
+If a title is too large to fit horizontally into the center, it is broken into words at space characters. The logic which handles this is not
+very sound, so this may lead to ugly results. You can avoid the breakup into words by replacing space characters in your titles by non-
+breaking space characters.
+
+	ignore_title_size: bool
+	
+If you enable this, then titles are drawn regardless of whether they fit into the middle or not. 
+
 
 Public Methods
 --------------
