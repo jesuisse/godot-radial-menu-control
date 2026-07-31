@@ -266,6 +266,8 @@ Known Bugs and Caveats
 
 This is version 1.1. There are bound to be bugs. Please report bugs you encounter so they can be fixed.
 
+When a title is takes too much space to fit horizontally into the center, the RadialMenu tries to break it into words and fits those. However, the math behind this is not very robust and this may lead to ugly results depending on your titles. If you want to avoid this breakup into multiple lines, use titles with non-breaking spaces as a workaround.
+
 The RadialMenu started life as a Popup in Godot 3, but is now a Control node, as Popup has been moved to another branch of the class tree in Godot 4, which is missing relevant functionality. So now there are positioning issues when you make the RadialMenu a child of a 
 Control container. A workaround is to put a Node of class "Node" between the container and the RadialMenu; an example of how this works is given in Demo3.tscn.
 

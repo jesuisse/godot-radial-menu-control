@@ -376,18 +376,47 @@ func _draw_center_ring():
 
 func _draw_label():	
 	var text
-	if selected < 0 or selected >= menu_items.size():
+	if selected < 0 or selected >= menu_items.size() or state == MenuState.closing:
 		return	
 	text = menu_items[selected]['title']
 	var font = _get_font("TitleFont")
 	var fontsize = _get_fontsize("TitleFont")	
 	var color = _get_color("TitleDisplay")
-	var size = font.get_string_size(text, HORIZONTAL_ALIGNMENT_CENTER, -1, fontsize)		
+	var size = font.get_string_size(text, HORIZONTAL_ALIGNMENT_CENTER, -1, fontsize)
+	var use_failsave = true
 	if ignore_title_size or center_radius > size.x / 2.0:
-		# show text if it fits inside the center ring
+		# easiest case: show text if it fits inside the center ring or user wants to ignore the size
 		var pos = center_offset - Vector2(size.x/2.0, -font.get_descent())
 		draw_string(font, pos, text, HORIZONTAL_ALIGNMENT_CENTER, -1, fontsize, color)
-	else:
+		use_failsave = false
+	elif text.contains(" "):
+		# see if we can break the text into multiple parts that each fit the center. The logic
+		# and math here is really too simple and only produces good results if the title consists 
+		# of maybe two or three words that just happen to fit at their respective positions.
+		# TODO: Maybe improve the math later. But if users get ugly results, they can always use
+		# non-breaking spaces in the titles to avoid this case.
+		# TODO: Maybe make this all way easier by simply adding a Label node to the RadialMenu?
+		# Seems we're duplicating what the Label node can already do here...
+		var parts = text.split(" ")
+		var sizes = []		
+		var total_height = 0
+		use_failsave = false
+		for part in parts:
+			size = font.get_string_size(part, HORIZONTAL_ALIGNMENT_LEFT, -1, fontsize)			
+			total_height += size.y
+			sizes.append(size)
+			if center_radius <= size.x / 2.0:
+				# can't fit this part, so use failsafe anyway
+				use_failsave = true
+				break
+		if not use_failsave:
+			var starty = -total_height/2.0 + sizes[0].y - font.get_descent()
+			for i in len(parts):
+				var pos = center_offset + Vector2(-sizes[i].x/2, starty)
+				starty += sizes[i].y				
+				draw_string(font, pos, parts[i], HORIZONTAL_ALIGNMENT_LEFT, -1, fontsize, color)				
+
+	if use_failsave:
 		# otherwise, draw "..." instead
 		size = font.get_string_size("...", HORIZONTAL_ALIGNMENT_CENTER, -1, fontsize)
 		var pos = center_offset - Vector2(size.x/2.0, -font.get_descent())
@@ -695,8 +724,7 @@ func _clear_items():
 	
 func set_tween(property, final_value):
 	tween = create_tween()
-	tween.finished.connect(_on_Tween_tween_all_completed)
-	#tween.connect("finished", Callable(self, "_on_Tween_tween_all_completed"))			
+	tween.finished.connect(_on_Tween_tween_all_completed)	
 	tween.set_trans(Tween.TRANS_SINE)
 	tween.set_ease(Tween.EASE_IN)		
 	tween.tween_property(self, property, final_value, animation_speed_factor)
@@ -947,7 +975,7 @@ func _on_visibility_changed():
 func _on_submenu_item_selected(id, position):	
 	var submenu = get_open_submenu()
 	_disconnect_submenu_signals(submenu)	
-	active_submenu_idx = -1
+	active_submenu_idx = -1	
 	close_menu()
 	item_selected.emit(id, opened_at_position)
 	
