@@ -1,3 +1,4 @@
+dist/
 .import/
 doc/*.import
 export.cfg
