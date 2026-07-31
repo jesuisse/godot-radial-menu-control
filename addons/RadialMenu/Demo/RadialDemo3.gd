@@ -45,7 +45,7 @@ func _ready():
 		{'texture': TWODEE_TEXTURE, 'title': "Axis Setup", 'id': submenu1}, 
 		{'texture': POINTS_TEXTURE, 'title': "Dataset Setup", 'id': submenu2},
 		{'texture': GRID_TEXTURE, 'title': "Grid Setup", 'id': submenu3},
-		{'texture': TOOL_TEXTURE, 'title': "Advanced Tools", 'id': submenu4},	
+		{'texture': TOOL_TEXTURE, 'title': "Very Advanced Tools", 'id': submenu4},	
 	]
 
 	
