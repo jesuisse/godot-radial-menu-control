@@ -60,7 +60,7 @@ enum Position { off, inside, outside }
 @export var radius := 150: set = _set_radius
 ## Defines the menu ring width
 @export var width := 50: set = _set_width
-## The size of the center circle
+## The size of the center circle. A size of 0 disables display of the center.
 @export var center_radius := 20: set = _set_center_radius
 ## Size of the gaps between segments
 @export_range(0, 30, 0.5) var gap_size := 3.0: set = _set_gap_size
@@ -81,9 +81,11 @@ enum Position { off, inside, outside }
 ## Scales the icons by this factor
 @export var icon_scale := 1.0: set = _set_icon_scale
 
-## If true, titles are shown in the center ring, assuming they fit.
+## If true, titles are shown in the center. If they don't fit on a single line, they are broken
+## into multiple lines at space characters. If you want to avoid this behaviour, use non-breaking
+## spaces instead of normal space characters in your titles.
 @export var show_titles := true: set = _set_titles_display
-## If true, the title size will be ignored when laying out the menu items.
+## If true, the title size will be ignored when drawing the title.
 @export var ignore_title_size := false
 
 
@@ -347,15 +349,15 @@ func _draw():
 	if center_radius != 0:
 		_draw_center()
 	
+	if show_titles and (not has_open_submenu() or get_open_submenu().selected == -1):
+		_draw_label()
+	
 	if DEBUG:
 		_debug_draw()
 
 func _draw_center():
 	if not is_submenu and center_radius > 0:
 		_draw_center_ring()
-	
-	if show_titles and (not has_open_submenu() or get_open_submenu().selected == -1):
-		_draw_label()
 	
 	
 func _draw_center_ring():
@@ -377,14 +379,18 @@ func _draw_center_ring():
 func _draw_label():	
 	var text
 	if selected < 0 or selected >= menu_items.size() or state == MenuState.closing:
-		return	
+		return
+	var considered_size = center_radius
+	if center_radius == 0:
+		considered_size = radius - get_total_ring_width()
+		
 	text = menu_items[selected]['title']
 	var font = _get_font("TitleFont")
 	var fontsize = _get_fontsize("TitleFont")	
 	var color = _get_color("TitleDisplay")
 	var size = font.get_string_size(text, HORIZONTAL_ALIGNMENT_CENTER, -1, fontsize)
 	var use_failsave = true
-	if ignore_title_size or center_radius > size.x / 2.0:
+	if ignore_title_size or considered_size > size.x / 2.0:
 		# easiest case: show text if it fits inside the center ring or user wants to ignore the size
 		var pos = center_offset - Vector2(size.x/2.0, -font.get_descent())
 		draw_string(font, pos, text, HORIZONTAL_ALIGNMENT_CENTER, -1, fontsize, color)
@@ -405,7 +411,7 @@ func _draw_label():
 			size = font.get_string_size(part, HORIZONTAL_ALIGNMENT_LEFT, -1, fontsize)			
 			total_height += size.y
 			sizes.append(size)
-			if center_radius <= size.x / 2.0:
+			if considered_size <= size.x / 2.0:
 				# can't fit this part, so use failsafe anyway
 				use_failsave = true
 				break
@@ -648,11 +654,9 @@ func get_inner_outer() -> Vector2:
 		outer = radius - drw
 	return Vector2(inner, outer)
 
-		
-func get_total_ring_width():
-	"""
-	Returns the total width of the ring (with decorator and selector)
-	"""
+
+## Gets the total with of the ring (including decorator and selector)		
+func get_total_ring_width() -> float:
 	var dw = _get_constant("DecoratorRingWidth")
 	var sw = _get_constant("SelectorSegmentWidth")
 	if decorator_ring_position == selector_position:
